@@ -376,7 +376,7 @@
                     <option value="L">L</option>
                     <option value="XL">XL</option>
                     <option value="XXL">XXL</option>
-                    <option value="XXXL">XXL</option>
+                    <option value="XXXL">XXXL</option>
                 </select>
             </div>
 
@@ -460,21 +460,13 @@
                 body: new FormData(form)
             })
             .then(res => {
-                // Beautiful, animated success modal
-                Swal.fire({
-                title: 'Registration Successful!',
-                text: 'See you at camp! ⛺',
-                icon: 'success',
-                confirmButtonColor: '#d33', // Change this to match your theme color
-                confirmButtonText: 'Awesome!'
-        });
-                // Reset form and UI elements
+                alert('Registration Successful! See you at camp!');
                 form.reset();
                 nonVegOptions.style.display = 'none';
                 instrumentOptions.style.display = 'none';
                 submitBtn.disabled = false;
-                 submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
-        })
+                submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
+            })
             .catch(error => {
                 alert('Something went wrong. Please try again.');
                 submitBtn.disabled = false;

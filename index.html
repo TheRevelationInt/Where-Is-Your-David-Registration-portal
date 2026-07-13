@@ -36,7 +36,7 @@
             /* --- STEP 3 REPLACEMENT WORK --- */
             background-color: #080012; 
             /* A dual linear-gradient creates an overlay to keep text hyper-readable */
-            background-image: linear-gradient(rgba(17, 1, 33, 0.3), rgba(17, 1, 33, 0.65)), url('https://drive.google.com/thumbnail?id=1LejZlfvagdaYYfSVjZflpiRx5MoV_Quz&sz=w2000');
+            background-image: linear-gradient(rgba(17, 1, 33, 0.3), rgba(17, 1, 33, 0.65)), url('https://drive.google.com/thumbnail?id= LejZlfvagdaYYfSVjZflpiRx5MoV_Quz&sz=w2000');
             background-repeat: no-repeat;
             background-position: center center;
             background-size: cover;
@@ -171,6 +171,11 @@
             background-color: rgba(59, 0, 102, 0.8);
         }
 
+        /* Fixes native device date picker layout inconsistencies */
+        input[type="date"].form-control {
+            color-scheme: dark;
+        }
+
         select.form-control option {
             background-color: var(--deep-purple);
             color: white;
@@ -260,6 +265,7 @@
         .premium-popup {
             border: 2px solid var(--primary-gold) !important;
             box-shadow: 0 0 30px rgba(204, 164, 59, 0.3) !important;
+            max-width: 90% !important; /* Prevents overflow on ultra-small mobile screens */
         }
 
         /* MOBILE MEDIA QUERIES EXTENSION */
@@ -275,6 +281,10 @@
             }
             .header-section h1 {
                 font-size: 25px; /* Keeps your custom golden font clean without breaking lines awkwardly */
+            }
+            /* Hides heavy framing side artwork on mobile for a faster, cleaner render */
+            body::before, body::after {
+                display: none;
             }
         }
     </style>
@@ -469,7 +479,7 @@
                 body: new FormData(form)
             })
             .then(res => {
-                // Customized SweetAlert2 popup layout[cite: 1]
+                // Customized SweetAlert2 popup layout[cite: 2]
                 Swal.fire({
                     title: 'Registration Successful!',
                     text: 'See you at camp! ⛺',
@@ -493,11 +503,11 @@
                     }
                 });
 
-                form.reset();[cite: 1]
-                nonVegOptions.style.display = 'none';[cite: 1]
-                instrumentOptions.style.display = 'none';[cite: 1]
-                submitBtn.disabled = false;[cite: 1]
-                submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';[cite: 1]
+                form.reset();[cite: 2]
+                nonVegOptions.style.display = 'none';[cite: 2]
+                instrumentOptions.style.display = 'none';[cite: 2]
+                submitBtn.disabled = false;[cite: 2]
+                submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';[cite: 2]
             })
             .catch(error => {
                 Swal.fire({
@@ -510,8 +520,8 @@
                     confirmButtonColor: '#cca43b'
                 });
                 
-                submitBtn.disabled = false;[cite: 1]
-                submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';[cite: 1]
+                submitBtn.disabled = false;[cite: 2]
+                submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';[cite: 2]
             });
         });
     </script>

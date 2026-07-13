@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Where Is Your David? - Youth Camp Registration</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Imported an elegant cinematic serif font for the highlighted title -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #cca43b;
+            --dark-gold: #b38f2e;
+            --royal-purple: #3b0066;
+            --deep-purple: #1a0033;
+            --input-bg: rgba(26, 0, 51, 0.6);
+            --text-light: #f5f5f5;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            
+            /* --- STEP 3 REPLACEMENT WORK --- */
+            background-color: #080012; 
+            /* A dual linear-gradient creates an overlay to keep text hyper-readable */
+            background-image: linear-gradient(rgba(17, 1, 33, 0.3), rgba(17, 1, 33, 0.65)), url('https://drive.google.com/thumbnail?id=1ogsKEGutdHtVga_rkd5tNn8WcdDVF53b&sz=w2000');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        /* Golden framing accents for premium graphic appeal */
+        body::before, body::after {
+            content: "";
+            position: fixed;
+            width: 350px;
+            height: 100%;
+            top: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.25;
+        }
+        body::before {
+            left: 0;
+            background: linear-gradient(135deg, var(--primary-gold) -40%, transparent 40%);
+            border-right: 1px solid rgba(204, 164, 59, 0.15);
+        }
+        body::after {
+            right: 0;
+            background: linear-gradient(-135deg, var(--primary-gold) -40%, transparent 40%);
+            border-left: 1px solid rgba(204, 164, 59, 0.15);
+        }
+
+        .bg-glow {
+            position: fixed;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(204,164,59,0.13) 0%, rgba(0,0,0,0) 70%);
+            top: -220px;
+            left: calc(50% - 400px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .portal-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 650px;
+            margin: 40px 20px;
+            background: rgba(17, 1, 33, 0.88); /* Opacity slightly reduced so graphic subtly peeks through */
+            border: 2px solid var(--primary-gold);
+            border-radius: 16px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(204, 164, 59, 0.15);
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .banner-container {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .banner-img {
+            max-width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--primary-gold);
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(204, 164, 59, 0.3);
+            padding-bottom: 20px;
+        }
+
+        /* Stylized gold title text */
+        .header-section h1 {
+            font-family: 'Cinzel', serif;
+            color: var(--primary-gold);
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin: 8px 0;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #fff5d6 0%, var(--primary-gold) 60%, var(--dark-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 12px rgba(204, 164, 59, 0.4), 0 0 25px rgba(204, 164, 59, 0.15);
+            filter: drop-shadow(0px 3px 4px rgba(0,0,0,0.6));
+        }
+
+        .header-section h2 {
+            font-size: 15px;
+            color: #fff;
+            font-weight: 500;
+            margin: 5px 0;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-gold);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            width: 16px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: var(--input-bg);
+            border: 1px solid rgba(204, 164, 59, 0.4);
+            border-radius: 6px;
+            color: white;
+            font-size: 16px; /* Optimized at 16px to prevent forced iOS automatic zooming */
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 10px rgba(204, 164, 59, 0.4);
+            background-color: rgba(59, 0, 102, 0.8);
+        }
+
+        select.form-control option {
+            background-color: var(--deep-purple);
+            color: white;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Checkbox lists */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(204, 164, 59, 0.2);
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .checkbox-label input {
+            accent-color: var(--primary-gold);
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Conditional Section Animations */
+        .conditional-section {
+            display: none;
+            border-left: 3px solid var(--primary-gold);
+            padding-left: 15px;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-register {
+            width: 100%;
+            background: linear-gradient(180deg, #ffe399 0%, var(--primary-gold) 60%, var(--dark-gold) 100%);
+            color: #1a0033;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.1s ease, box-shadow 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+            margin-top: 25px;
+        }
+
+        .btn-register:hover {
+            box-shadow: 0 0 20px var(--primary-gold);
+            transform: translateY(-2px);
+        }
+
+        .btn-register:active {
+            transform: translateY(0);
+        }
+
+        .footer-branding {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: rgba(245, 245, 245, 0.5);
+            letter-spacing: 2px;
+            border-top: 1px solid rgba(204, 164, 59, 0.2);
+            padding-top: 20px;
+            text-transform: uppercase;
+        }
+
+        /* MOBILE MEDIA QUERIES EXTENSION */
+        @media (max-width: 600px) {
+            body {
+                background-position: center top; 
+                background-attachment: scroll; /* Stops jumpy graphic zooming bugs on mobile browsers */
+            }
+            .portal-container {
+                margin: 15px 10px;
+                padding: 24px 16px; /* Optimizes narrow viewport spacing */
+                border-radius: 12px;
+            }
+            .header-section h1 {
+                font-size: 25px; /* Keeps your custom golden font clean without breaking lines awkwardly */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    
+    <div class="portal-container">
+        <!-- Image Header Section -->
+        <div class="banner-container">
+            <img src="YOUR_IMAGE_URL_HERE" alt="Camp Banner" class="banner-img" onerror="this.style.display='none'">
+        </div>
+
+        <div class="header-section">
+            <h2>Organized by Joshua's Force</h2>
+            <h1>Where Is Your David?</h1>
+            <h2 style="color: var(--primary-gold); letter-spacing: 4px;">YOUTH CAMP REGISTRATION</h2>
+        </div>
+
+        <form id="registrationForm" action="https://script.google.com/macros/s/AKfycbzOOw27Bu40KkZsrmCf0cINdQi_bXPf-Z_-WP5jgmwafNToCBNEAG5CbiWSdU98q9Kl/exec" method="POST">
+            
+            <div class="form-group">
+                <label><i class="fa-solid fa-user"></i> Full Name</label>
+                <input type="text" name="fullName" class="form-control" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-phone"></i> Contact Number</label>
+                <input type="tel" name="contactNumber" class="form-control" placeholder="Enter your contact number" required>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-calendar-days"></i> Date of Birth</label>
+                <input type="date" name="dob" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-house"></i> Address</label>
+                <textarea name="address" class="form-control" placeholder="Enter your full address" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-church"></i> Church</label>
+                <select name="church" id="churchSelect" class="form-control" required>
+                    <option value="" disabled selected>Select your church</option>
+                </select>
+            </div>
+
+            <!-- Conditional Church Pastor Field -->
+            <div class="form-group">
+                <label><i class="fa-solid fa-user-tie"></i> Church Pastor's Name</label>
+                <input type="text" name="pastorName" class="form-control" placeholder="Enter your Pastor's name" required>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-language"></i> Preferred Language</label>
+                <select name="languagePreference" class="form-control" required>
+                    <option value="" disabled selected>Select preferred language</option>
+                    <option value="Sinhala">Sinhala</option>
+                    <option value="Tamil">Tamil</option>
+                    <option value="English">English</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-venus-mars"></i> Gender</label>
+                <select name="gender" class="form-control" required>
+                    <option value="" disabled selected>Select gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+
+            <!-- Optional Field: Email -->
+            <div class="form-group">
+                <label><i class="fa-solid fa-envelope"></i> Email (Optional)</label>
+                <input type="email" name="email" class="form-control" placeholder="Enter your email address">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-utensils"></i> Food Preference</label>
+                <select name="foodPreference" id="foodPreference" class="form-control" required>
+                    <option value="" disabled selected>Select preference</option>
+                    <option value="Vegetarian">Vegetarian</option>
+                    <option value="Non-Vegetarian">Non-Vegetarian</option>
+                </select>
+            </div>
+
+            <!-- Conditional Non-Veg Selection -->
+            <div id="nonVegOptions" class="conditional-section">
+                <div class="form-group">
+                    <label><i class="fa-solid fa-drumstick-bite"></i> Select your choices (Multiple allowed)</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label"><input type="checkbox" name="nonVegChoice" value="Chicken"> Chicken</label>
+                        <label class="checkbox-label"><input type="checkbox" name="nonVegChoice" value="Beef"> Beef</label>
+                        <label class="checkbox-label"><input type="checkbox" name="nonVegChoice" value="Pork"> Pork</label>
+                        <label class="checkbox-label"><input type="checkbox" name="nonVegChoice" value="Sea Food"> Sea Food</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-shirt"></i> T-Shirt Size</label>
+                <select name="tshirtSize" class="form-control" required>
+                    <option value="" disabled selected>Select T-Shirt Size</option>
+                    <option value="XS">XS</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
+                </select>
+            </div>
+
+            <!-- Optional Field: Worship Team Role -->
+            <div class="form-group">
+                <label><i class="fa-solid fa-music"></i> Are you a member or leader in a worship team? (Optional)</label>
+                <select name="worshipRole" id="worshipRole" class="form-control">
+                    <option value="" selected>No / Not Applicable</option>
+                    <option value="Vocalist">Vocalist</option>
+                    <option value="Instrument Player">Instrument Player</option>
+                    <option value="Both Vocalist & Instrument Player">Both Vocalist & Instrument Player</option>
+                </select>
+            </div>
+
+            <!-- Conditional Instrument Selection -->
+            <div id="instrumentOptions" class="conditional-section">
+                <div class="form-group">
+                    <label><i class="fa-solid fa-guitar"></i> Select Instrument(s)</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label"><input type="checkbox" name="worshipInstruments" value="Rhythm Guitar"> Rhythm Guitar</label>
+                        <label class="checkbox-label"><input type="checkbox" name="worshipInstruments" value="Lead Guitar"> Lead Guitar</label>
+                        <label class="checkbox-label"><input type="checkbox" name="worshipInstruments" value="Bass Guitar"> Bass Guitar</label>
+                        <label class="checkbox-label"><input type="checkbox" name="worshipInstruments" value="Keyboard"> Keyboard</label>
+                        <label class="checkbox-label"><input type="checkbox" name="worshipInstruments" value="Drums"> Drums</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-register">
+                <i class="fa-solid fa-crown"></i> Register
+            </button>
+        </form>
+
+        <div class="footer-branding">
+            The Revelation International
+        </div>
+    </div>
+
+    <script>
+        const churchSelect = document.getElementById('churchSelect');
+        for (let i = 1; i <= 52; i++) {
+            let opt = document.createElement('option');
+            opt.value = `Church ${i}`;
+            opt.innerHTML = `Church ${i}`;
+            churchSelect.appendChild(opt);
+        }
+
+        const foodPreference = document.getElementById('foodPreference');
+        const nonVegOptions = document.getElementById('nonVegOptions');
+        
+        foodPreference.addEventListener('change', function() {
+            if (this.value === 'Non-Vegetarian') {
+                nonVegOptions.style.display = 'block';
+            } else {
+                nonVegOptions.style.display = 'none';
+                document.querySelectorAll('input[name="nonVegChoice"]').forEach(cb => cb.checked = false);
+            }
+        });
+
+        const worshipRole = document.getElementById('worshipRole');
+        const instrumentOptions = document.getElementById('instrumentOptions');
+
+        worshipRole.addEventListener('change', function() {
+            if (this.value === 'Instrument Player' || this.value === 'Both Vocalist & Instrument Player') {
+                instrumentOptions.style.display = 'block';
+            } else {
+                instrumentOptions.style.display = 'none';
+                document.querySelectorAll('input[name="worshipInstruments"]').forEach(cb => cb.checked = false);
+            }
+        });
+
+        const form = document.getElementById('registrationForm');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const submitBtn = form.querySelector('.btn-register');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = "Processing...";
+
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(res => {
+                alert('Registration Successful! See you at camp!');
+                form.reset();
+                nonVegOptions.style.display = 'none';
+                instrumentOptions.style.display = 'none';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
+            })
+            .catch(error => {
+                alert('Something went wrong. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
+            });
+        });
+    </script>
+</body>
+</html>

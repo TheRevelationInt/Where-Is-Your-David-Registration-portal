@@ -31,23 +31,16 @@
             align-items: center;
             min-height: 100vh;
             position: relative;
+            overflow-x: hidden;
+            
+            /* --- STEP 3 REPLACEMENT WORK --- */
             background-color: #080012; 
-        }
-
-        /* --- CROSS-PLATFORM MOBILE & PC BACKGROUND FIX --- */
-        .mobile-safe-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            /* Using a separate div removes mobile 'background-attachment: fixed' lag entirely */
+            /* A dual linear-gradient creates an overlay to keep text hyper-readable */
             background-image: linear-gradient(rgba(17, 1, 33, 0.3), rgba(17, 1, 33, 0.65)), url('https://drive.google.com/thumbnail?id=1LejZlfvagdaYYfSVjZflpiRx5MoV_Quz&sz=w2000');
             background-repeat: no-repeat;
             background-position: center center;
             background-size: cover;
-            pointer-events: none;
+            background-attachment: fixed;
         }
 
         /* Golden framing accents for premium graphic appeal */
@@ -89,7 +82,7 @@
             width: 100%;
             max-width: 650px;
             margin: 40px 20px;
-            background: rgba(17, 1, 33, 0.88); /* Opacity subtly peeks background graphic through */
+            background: rgba(17, 1, 33, 0.88); /* Opacity slightly reduced so graphic subtly peeks through */
             border: 2px solid var(--primary-gold);
             border-radius: 16px;
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(204, 164, 59, 0.15);
@@ -267,28 +260,26 @@
         .premium-popup {
             border: 2px solid var(--primary-gold) !important;
             box-shadow: 0 0 30px rgba(204, 164, 59, 0.3) !important;
-            max-width: 90% !important; /* Mobile safe width */
         }
 
         /* MOBILE MEDIA QUERIES EXTENSION */
         @media (max-width: 600px) {
+            body {
+                background-position: center top; 
+                background-attachment: scroll; /* Stops jumpy graphic zooming bugs on mobile browsers */
+            }
             .portal-container {
                 margin: 15px 10px;
-                padding: 24px 16px; /* Optimizes mobile viewing area */
+                padding: 24px 16px; /* Optimizes narrow viewport spacing */
                 border-radius: 12px;
             }
             .header-section h1 {
-                font-size: 25px; /* Clean mobile responsive layout */
-            }
-            body::before, body::after {
-                display: none; /* Hide frame accents on mobile screens for better visibility */
+                font-size: 25px; /* Keeps your custom golden font clean without breaking lines awkwardly */
             }
         }
     </style>
 </head>
 <body>
-    <!-- The dedicated container ensuring the background remains visible across devices -->
-    <div class="mobile-safe-bg"></div>
     <div class="bg-glow"></div>
     
     <div class="portal-container">
@@ -478,7 +469,7 @@
                 body: new FormData(form)
             })
             .then(res => {
-                // Customized SweetAlert2 popup layout[cite: 3]
+                // Customized SweetAlert2 popup layout[cite: 1]
                 Swal.fire({
                     title: 'Registration Successful!',
                     text: 'See you at camp! ⛺',
@@ -502,11 +493,11 @@
                     }
                 });
 
-                form.reset();[cite: 3]
-                nonVegOptions.style.display = 'none';[cite: 3]
-                instrumentOptions.style.display = 'none';[cite: 3]
-                submitBtn.disabled = false;[cite: 3]
-                submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';[cite: 3]
+                form.reset();[cite: 1]
+                nonVegOptions.style.display = 'none';[cite: 1]
+                instrumentOptions.style.display = 'none';[cite: 1]
+                submitBtn.disabled = false;[cite: 1]
+                submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';[cite: 1]
             })
             .catch(error => {
                 Swal.fire({
@@ -519,8 +510,8 @@
                     confirmButtonColor: '#cca43b'
                 });
                 
-                submitBtn.disabled = false;[cite: 3]
-                submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';[cite: 3]
+                submitBtn.disabled = false;[cite: 1]
+                submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';[cite: 1]
             });
         });
     </script>

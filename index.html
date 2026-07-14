@@ -311,11 +311,46 @@
                 <input name="address" class="form-control" placeholder="Enter your full address" required>
             </div>
 
+            <!-- Modified Church Question Section -->
             <div class="form-group">
                 <label><i class="fa-solid fa-church"></i> Church</label>
-                <select name="church" id="churchSelect" class="form-control" required>
+                <select name="churchCategory" id="churchCategory" class="form-control" required>
                     <option value="" disabled selected>Select your church</option>
+                    <option value="AOG">1. AOG</option>
+                    <option value="Non-AOG">2. Non-AOG</option>
                 </select>
+            </div>
+
+            <!-- Conditional Section for AOG -->
+            <div id="aogSection" class="conditional-section">
+                <div class="form-group">
+                    <label><i class="fa-solid fa-signature"></i> Church Name</label>
+                    <input type="text" name="aogChurchName" id="aogChurchName" class="form-control" placeholder="Enter AOG Church name">
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-city"></i> Suburb / City</label>
+                    <input type="text" name="aogSuburbCity" id="aogSuburbCity" class="form-control" placeholder="Enter suburb or city">
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-map"></i> District</label>
+                    <input type="text" name="aogDistrict" id="aogDistrict" class="form-control" placeholder="Enter district">
+                </div>
+            </div>
+
+            <!-- Conditional Section for Non-AOG -->
+            <div id="nonAogSection" class="conditional-section">
+                <div class="form-group">
+                    <label><i class="fa-solid fa-signature"></i> Church Name</label>
+                    <input type="text" name="nonAogChurchName" id="nonAogChurchName" class="form-control" placeholder="Enter Non-AOG Church name">
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-city"></i> Suburb / City</label>
+                    <input type="text" name="nonAogSuburbCity" id="nonAogSuburbCity" class="form-control" placeholder="Enter suburb or city">
+                </div>
+                <div class="form-group">
+                    <label><i class="fa-solid fa-map"></i> District</label>
+                    <input type="text" name="nonAogDistrict" id="nonAogDistrict" class="form-control" placeholder="Enter district">
+                </div>
             </div>
 
             <!-- Conditional Church Pastor Field -->
@@ -421,13 +456,43 @@
     </div>
 
     <script>
-        const churchSelect = document.getElementById('churchSelect');
-        for (let i = 1; i <= 52; i++) {
-            let opt = document.createElement('option');
-            opt.value = `Church ${i}`;
-            opt.innerHTML = `Church ${i}`;
-            churchSelect.appendChild(opt);
-        }
+        // Conditional Church selection behavior
+        const churchCategory = document.getElementById('churchCategory');
+        const aogSection = document.getElementById('aogSection');
+        const nonAogSection = document.getElementById('nonAogSection');
+
+        // Inputs from both sections
+        const aogInputs = aogSection.querySelectorAll('input');
+        const nonAogInputs = nonAogSection.querySelectorAll('input');
+
+        churchCategory.addEventListener('change', function() {
+            if (this.value === 'AOG') {
+                aogSection.style.display = 'block';
+                nonAogSection.style.display = 'none';
+                
+                // Make active section's inputs required, clear and disable inactive section's inputs
+                aogInputs.forEach(input => input.required = true);
+                nonAogInputs.forEach(input => {
+                    input.required = false;
+                    input.value = '';
+                });
+            } else if (this.value === 'Non-AOG') {
+                aogSection.style.display = 'none';
+                nonAogSection.style.display = 'block';
+
+                // Make active section's inputs required, clear and disable inactive section's inputs
+                nonAogInputs.forEach(input => input.required = true);
+                aogInputs.forEach(input => {
+                    input.required = false;
+                    input.value = '';
+                });
+            } else {
+                aogSection.style.display = 'none';
+                nonAogSection.style.display = 'none';
+                aogInputs.forEach(input => { input.required = false; input.value = ''; });
+                nonAogInputs.forEach(input => { input.required = false; input.value = ''; });
+            }
+        });
 
         const foodPreference = document.getElementById('foodPreference');
         const nonVegOptions = document.getElementById('nonVegOptions');
@@ -467,6 +532,8 @@
             .then(res => {
                 alert('Registration Successful! See you at camp!');
                 form.reset();
+                aogSection.style.display = 'none';
+                nonAogSection.style.display = 'none';
                 nonVegOptions.style.display = 'none';
                 instrumentOptions.style.display = 'none';
                 submitBtn.disabled = false;

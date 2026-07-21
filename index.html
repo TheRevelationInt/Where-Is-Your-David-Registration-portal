@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Where Is Your David? - Youth Camp Registration</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Imported an elegant cinematic serif font for the highlighted title -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -28,10 +27,7 @@
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
-            
-            /* --- STEP 3 REPLACEMENT WORK --- */
             background-color: #080012; 
-            /* A dual linear-gradient creates an overlay to keep text hyper-readable */
             background-image: linear-gradient(rgba(17, 1, 33, 0.3), rgba(17, 1, 33, 0.65)), url('https://drive.google.com/thumbnail?id=1LejZlfvagdaYYfSVjZflpiRx5MoV_Quz&sz=w2000');
             background-repeat: no-repeat;
             background-position: center center;
@@ -39,7 +35,6 @@
             background-attachment: fixed;
         }
 
-        /* Golden framing accents for premium graphic appeal */
         body::before, body::after {
             content: "";
             position: fixed;
@@ -78,7 +73,7 @@
             width: 100%;
             max-width: 650px;
             margin: 40px 20px;
-            background: rgba(17, 1, 33, 0.88); /* Opacity slightly reduced so graphic subtly peeks through */
+            background: rgba(17, 1, 33, 0.88);
             border: 2px solid var(--primary-gold);
             border-radius: 16px;
             box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(204, 164, 59, 0.15);
@@ -105,7 +100,6 @@
             padding-bottom: 20px;
         }
 
-        /* Stylized gold title text */
         .header-section h1 {
             font-family: 'Cinzel Decorative', serif;
             color: var(--primary-gold);
@@ -155,7 +149,7 @@
             border: 1px solid rgba(204, 164, 59, 0.4);
             border-radius: 6px;
             color: white;
-            font-size: 16px; /* Optimized at 16px to prevent forced iOS automatic zooming */
+            font-size: 16px;
             box-sizing: border-box;
             transition: all 0.3s ease;
         }
@@ -172,12 +166,6 @@
             color: white;
         }
 
-        textarea.form-control {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        /* Prefix Input Box Style */
         .input-with-prefix {
             display: flex;
             align-items: center;
@@ -211,7 +199,6 @@
             background-color: rgba(59, 0, 102, 0.8);
         }
 
-        /* Checkbox lists */
         .checkbox-group {
             display: flex;
             flex-direction: column;
@@ -236,13 +223,19 @@
             height: 18px;
         }
 
-        /* Conditional Section Animations */
         .conditional-section {
             display: none;
             border-left: 3px solid var(--primary-gold);
             padding-left: 15px;
             margin-top: -10px;
             margin-bottom: 20px;
+        }
+
+        .file-hint {
+            font-size: 12px;
+            color: rgba(245, 245, 245, 0.6);
+            margin-top: 4px;
+            display: block;
         }
 
         .btn-register {
@@ -286,19 +279,18 @@
             text-transform: uppercase;
         }
 
-        /* MOBILE MEDIA QUERIES EXTENSION */
         @media (max-width: 600px) {
             body {
                 background-position: center top; 
-                background-attachment: scroll; /* Stops jumpy graphic zooming bugs on mobile browsers */
+                background-attachment: scroll;
             }
             .portal-container {
                 margin: 15px 10px;
-                padding: 24px 16px; /* Optimizes narrow viewport spacing */
+                padding: 24px 16px;
                 border-radius: 12px;
             }
             .header-section h1 {
-                font-size: 25px; /* Keeps your custom golden font clean without breaking lines awkwardly */
+                font-size: 25px;
             }
         }
     </style>
@@ -307,7 +299,6 @@
     <div class="bg-glow"></div>
     
     <div class="portal-container">
-        <!-- Image Header Section -->
         <div class="banner-container">
             <img src="YOUR_IMAGE_URL_HERE" alt="Camp Banner" class="banner-img" onerror="this.style.display='none'">
         </div>
@@ -333,7 +324,7 @@
             <div class="form-group">
                 <label><i class="fa-brands fa-whatsapp"></i> WhatsApp Number</label>
                 <input type="tel" name="whatsAppNumber" class="form-control" placeholder="Enter your whatsapp number" required>
-           </div>
+            </div>
 
             <div class="form-group">
                 <label><i class="fa-solid fa-calendar-days"></i> Date of Birth</label>
@@ -345,7 +336,7 @@
                 <input name="address" class="form-control" placeholder="Enter your full address" required>
             </div>
 
-            <!-- Modified Church Question Section -->
+            <!-- Church Question Section -->
             <div class="form-group">
                 <label><i class="fa-solid fa-church"></i> Church</label>
                 <select name="churchCategory" id="churchCategory" class="form-control" required>
@@ -359,7 +350,10 @@
             <div id="aogSection" class="conditional-section">
                 <div class="form-group">
                     <label><i class="fa-solid fa-signature"></i> Church Name</label>
-                    <input type="text" name="aogChurchName" id="aogChurchName" class="form-control" placeholder="Enter AOG Church name">
+                    <div class="input-with-prefix">
+                        <span class="input-prefix-text">AOG -</span>
+                        <input type="text" name="aogChurchName" id="aogChurchName" class="form-control" placeholder="enter your church name (eg - Rambukkana)">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label><i class="fa-solid fa-city"></i> Suburb / City</label>
@@ -387,7 +381,6 @@
                 </div>
             </div>
 
-            <!-- Adjusted Church Pastor Field -->
             <div class="form-group">
                 <label><i class="fa-solid fa-user-tie"></i> Church Pastor's Name</label>
                 <div class="input-with-prefix">
@@ -415,7 +408,6 @@
                 </select>
             </div>
 
-            <!-- Optional Field: Email -->
             <div class="form-group">
                 <label><i class="fa-solid fa-envelope"></i> Email (Optional)</label>
                 <input type="email" name="email" class="form-control" placeholder="Enter your email address">
@@ -430,7 +422,6 @@
                 </select>
             </div>
 
-            <!-- Conditional Non-Veg Selection -->
             <div id="nonVegOptions" class="conditional-section">
                 <div class="form-group">
                     <label><i class="fa-solid fa-drumstick-bite"></i> Select your choices (Multiple allowed)</label>
@@ -457,7 +448,6 @@
                 </select>
             </div>
 
-            <!-- Optional Field: Worship Team Role -->
             <div class="form-group">
                 <label><i class="fa-solid fa-music"></i> Are you a Musician or a Vocalist in a worship team? (Optional)</label>
                 <select name="worshipRole" id="worshipRole" class="form-control">
@@ -468,7 +458,6 @@
                 </select>
             </div>
 
-            <!-- Conditional Instrument Selection -->
             <div id="instrumentOptions" class="conditional-section">
                 <div class="form-group">
                     <label><i class="fa-solid fa-guitar"></i> Select Instrument(s)</label>
@@ -482,6 +471,13 @@
                 </div>
             </div>
 
+            <!-- New Payment Proof Attachment Section -->
+            <div class="form-group">
+                <label><i class="fa-solid fa-file-invoice-dollar"></i> Upload Payment Proof</label>
+                <input type="file" id="paymentProof" class="form-control" accept=".pdf, .png, .jpg, .jpeg" required>
+                <span class="file-hint">Accepted Formats: PDF, PNG, JPG, JPEG (Max file size: 10MB)</span>
+            </div>
+
             <button type="submit" class="btn-register">
                 <i class="fa-solid fa-crown"></i> Register
             </button>
@@ -493,12 +489,10 @@
     </div>
 
     <script>
-        // Conditional Church selection behavior
         const churchCategory = document.getElementById('churchCategory');
         const aogSection = document.getElementById('aogSection');
         const nonAogSection = document.getElementById('nonAogSection');
 
-        // Inputs from both sections
         const aogInputs = aogSection.querySelectorAll('input');
         const nonAogInputs = nonAogSection.querySelectorAll('input');
 
@@ -507,7 +501,6 @@
                 aogSection.style.display = 'block';
                 nonAogSection.style.display = 'none';
                 
-                // Make active section's inputs required, clear and disable inactive section's inputs
                 aogInputs.forEach(input => input.required = true);
                 nonAogInputs.forEach(input => {
                     input.required = false;
@@ -517,7 +510,6 @@
                 aogSection.style.display = 'none';
                 nonAogSection.style.display = 'block';
 
-                // Make active section's inputs required, clear and disable inactive section's inputs
                 nonAogInputs.forEach(input => input.required = true);
                 aogInputs.forEach(input => {
                     input.required = false;
@@ -562,25 +554,53 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = "Processing...";
 
-            fetch(form.action, {
-                method: 'POST',
-                body: new FormData(form)
-            })
-            .then(res => {
-                alert('Registration Successful! See you at camp on 23rd of October! At MAS Fabric Park! Please contact for more details Pastor Kithmal Perera');
-                form.reset();
-                aogSection.style.display = 'none';
-                nonAogSection.style.display = 'none';
-                nonVegOptions.style.display = 'none';
-                instrumentOptions.style.display = 'none';
+            const fileInput = document.getElementById('paymentProof');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a payment proof file to upload.');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
-            })
-            .catch(error => {
-                alert('Something went wrong. Please try again.');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
-            });
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const base64Data = evt.target.result;
+                const formData = new URLSearchParams(new FormData(form));
+
+                // Append file info as params
+                formData.append('fileData', base64Data);
+                formData.append('fileName', file.name);
+                formData.append('fileMimeType', file.type);
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.result === 'success') {
+                        alert('Registration Successful! See you at camp on 23rd of October! At MAS Fabric Park! Please contact for more details Pastor Kithmal Perera');
+                        form.reset();
+                        aogSection.style.display = 'none';
+                        nonAogSection.style.display = 'none';
+                        nonVegOptions.style.display = 'none';
+                        instrumentOptions.style.display = 'none';
+                    } else {
+                        alert('Error saving data: ' + (data.error || 'Unknown error'));
+                    }
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
+                })
+                .catch(error => {
+                    alert('Something went wrong. Please try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
+                });
+            };
+
+            reader.readAsDataURL(file);
         });
     </script>
 </body>

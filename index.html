@@ -332,10 +332,11 @@
             background: #000;
         }
 
-        .video-container video {
+        .video-container iframe {
             width: 100%;
+            height: 280px;
+            border: none;
             display: block;
-            max-height: 300px;
         }
 
         .btn-modal-close {
@@ -368,6 +369,9 @@
             }
             .header-section h1 {
                 font-size: 25px;
+            }
+            .video-container iframe {
+                height: 200px;
             }
         }
     </style>
@@ -423,7 +427,7 @@
                 </select>
             </div>
 
-            <!-- Conditional Section for AOG (Suburb/City removed) -->
+            <!-- Conditional Section for AOG -->
             <div id="aogSection" class="conditional-section">
                 <div class="form-group">
                     <label><i class="fa-solid fa-signature"></i> Church Name</label>
@@ -569,12 +573,9 @@
             <div class="modal-item">📍 At MAS Fabric Park, Thulhiriya</div>
             <div class="modal-item">📞 Please contact Pastor Kithmal Perera for more details +94 773 634 548</div>
 
-            <!-- Embedded Video Player -->
+            <!-- Embedded Google Drive Video Player -->
             <div class="video-container">
-                <video id="successVideo" controls playsinline preload="auto">
-                    <source src="https://drive.google.com/uc?export=download&id=1i6Qp4dEtlcCH1usAQ90MGRHrf9Uniwmz" type="video/mp4">
-                    Your browser does not support playing HTML5 video.
-                </video>
+                <iframe id="successVideo" src="https://drive.google.com/file/d/1i6Qp4dEtlcCH1usAQ90MGRHrf9Uniwmz/preview" allow="autoplay"></iframe>
             </div>
 
             <button onclick="closeModal()" class="btn-modal-close">OK</button>
@@ -641,10 +642,11 @@
         });
 
         function closeModal() {
-            const video = document.getElementById('successVideo');
-            if (video) {
-                video.pause();
-                video.currentTime = 0;
+            const iframe = document.getElementById('successVideo');
+            if (iframe) {
+                // Refresh iframe src to stop playback audio when closing modal
+                const src = iframe.src;
+                iframe.src = src;
             }
             document.getElementById('successModal').style.display = 'none';
         }
@@ -683,21 +685,6 @@
                 .then(data => {
                     if (data.result === 'success') {
                         document.getElementById('successModal').style.display = 'flex';
-                        
-                        // Autoplay handler with audio policy fallback
-                        const video = document.getElementById('successVideo');
-                        if (video) {
-                            video.currentTime = 0;
-                            const playPromise = video.play();
-                            
-                            if (playPromise !== undefined) {
-                                playPromise.catch(error => {
-                                    // If unmuted autoplay fails due to browser restriction, fallback to muted autoplay
-                                    video.muted = true;
-                                    video.play();
-                                });
-                            }
-                        }
 
                         form.reset();
                         aogSection.style.display = 'none';

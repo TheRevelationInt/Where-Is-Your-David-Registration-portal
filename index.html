@@ -88,9 +88,12 @@
         }
 
         .banner-img {
-            max-width: 100%;
+            max-width: 60%; /* Adjust this percentage (e.g., 50%, 70%) or set a fixed max-width like 300px */
+            height: auto;     /* Maintains correct aspect ratio */
             border-radius: 8px;
             border: none;
+            margin: 0 auto;
+            display: block;   /* Keeps the image properly centered */
         }
 
         .header-section {
@@ -287,13 +290,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(0, 0, 0, 0.8);
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            overflow-y: auto;
-            padding: 20px;
-            box-sizing: border-box;
         }
 
         .modal-content {
@@ -301,8 +301,8 @@
             border: 2px solid var(--primary-gold);
             border-radius: 12px;
             padding: 25px;
-            max-width: 550px;
-            width: 90%;
+            max-width: 450px;
+            width: 85%;
             box-shadow: 0 0 30px rgba(204, 164, 59, 0.4);
             text-align: left;
         }
@@ -321,22 +321,6 @@
             border-bottom: 1px solid rgba(204, 164, 59, 0.3);
             padding-bottom: 10px;
             margin-bottom: 15px;
-        }
-
-        .video-container {
-            width: 100%;
-            margin: 15px 0;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid var(--primary-gold);
-            background: #000;
-        }
-
-        .video-container iframe {
-            width: 100%;
-            height: 280px;
-            border: none;
-            display: block;
         }
 
         .btn-modal-close {
@@ -369,9 +353,6 @@
             }
             .header-section h1 {
                 font-size: 25px;
-            }
-            .video-container iframe {
-                height: 200px;
             }
         }
     </style>
@@ -427,7 +408,7 @@
                 </select>
             </div>
 
-            <!-- Conditional Section for AOG -->
+            <!-- Conditional Section for AOG (Suburb/City removed) -->
             <div id="aogSection" class="conditional-section">
                 <div class="form-group">
                     <label><i class="fa-solid fa-signature"></i> Church Name</label>
@@ -571,13 +552,7 @@
             <div class="modal-item main-title">✅ Registration Successful!</div>
             <div class="modal-item">📅 See you on 23rd of October</div>
             <div class="modal-item">📍 At MAS Fabric Park, Thulhiriya</div>
-            <div class="modal-item">📞 Please contact Pastor Kithmal Perera for more details +94 773 634 548</div>
-
-            <!-- Embedded Google Drive Video Player -->
-            <div class="video-container">
-                <iframe id="successVideo" src="https://drive.google.com/file/d/1i6Qp4dEtlcCH1usAQ90MGRHrf9Uniwmz/preview" allow="autoplay"></iframe>
-            </div>
-
+            <div class="modal-item">📞 For further details, please contact Pastor Kithmal Perera +94 773 634 548</div>
             <button onclick="closeModal()" class="btn-modal-close">OK</button>
         </div>
     </div>
@@ -642,12 +617,6 @@
         });
 
         function closeModal() {
-            const iframe = document.getElementById('successVideo');
-            if (iframe) {
-                // Refresh iframe src to stop playback audio when closing modal
-                const src = iframe.src;
-                iframe.src = src;
-            }
             document.getElementById('successModal').style.display = 'none';
         }
 
@@ -685,7 +654,6 @@
                 .then(data => {
                     if (data.result === 'success') {
                         document.getElementById('successModal').style.display = 'flex';
-
                         form.reset();
                         aogSection.style.display = 'none';
                         nonAogSection.style.display = 'none';
@@ -698,7 +666,7 @@
                     submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
                 })
                 .catch(error => {
-                    alert('Something went wrong. Please try again. Please contact Pastor Kithmal Perera');
+                    alert('Something went wrong. Please try again. Please contact Pastor Kithmal Perera +94 773 634 548');
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
                 });

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Where Is Your David? - Youth Camp Registration</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -318,6 +318,9 @@
             margin-bottom: 12px;
             line-height: 1.5;
             color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .modal-item.main-title {
@@ -330,8 +333,10 @@
         }
 
         .modal-item i {
-            margin-right: 10px;
             color: var(--primary-gold);
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
         }
 
         .btn-modal-close {
@@ -453,8 +458,8 @@
 
             <div class="form-group">
                 <label><i class="fa-solid fa-user-tie"></i> Church Pastor's Name</label>
-                <div class="input-with-prefix">
-                    <span class="input-prefix-text">Pastor -</span>
+                <div class="input-with-prefix" id="pastorPrefixWrapper">
+                    <span class="input-prefix-text" id="pastorPrefix">Pastor -</span>
                     <input type="text" name="pastorName" id="pastorName" class="form-control" placeholder="Enter your Pastor's name" required>
                 </div>
             </div>
@@ -562,9 +567,9 @@
     <div id="successModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-item main-title"><i class="fa-solid fa-circle-check"></i> Registration Successful!</div>
-            <div class="modal-item"><i class="fa-solid fa-calendar-check"></i> See you on 23rd of October</div>
+            <div class="modal-item"><i class="fa-solid fa-calendar-days"></i> See you on 23rd of October</div>
             <div class="modal-item"><i class="fa-solid fa-location-dot"></i> At MAS Fabric Park, Thulhiriya</div>
-            <div class="modal-item" id="modalContactInfo"><i class="fa-solid fa-phone"></i> For further details, please contact Pastor Kithmal Perera +94 773 634 548</div>
+            <div class="modal-item" id="modalContactInfo"><i class="fa-solid fa-phone"></i> <span id="modalContactText">For further details, please contact Pastor Kithmal Perera +94 773 634 548</span></div>
             <button onclick="closeModal()" class="btn-modal-close">OK</button>
         </div>
     </div>
@@ -589,7 +594,6 @@
         const nonAogInputs = nonAogSection.querySelectorAll('input');
 
         churchCategory.addEventListener('change', function() {
-            // Reset state
             aogSection.style.display = 'none';
             nonAogSection.style.display = 'none';
             nonAogChurchNameGroup.style.display = 'block';
@@ -598,11 +602,9 @@
             nonAogInputs.forEach(input => { 
                 input.required = false; 
                 input.value = ''; 
-                input.disabled = false;
             });
 
             pastorName.value = '';
-            pastorName.disabled = false;
 
             if (this.value === 'AOG') {
                 aogSection.style.display = 'block';
@@ -623,13 +625,8 @@
                 nonAogChurchNameGroup.style.display = 'none'; 
 
                 nonAogSuburbCity.value = 'Mount Lavinia';
-                nonAogSuburbCity.disabled = true;
-
                 nonAogDistrict.value = 'Colombo';
-                nonAogDistrict.disabled = true;
-
-                pastorName.value = 'Pastor Kapila De Silva';
-                pastorName.disabled = true;
+                pastorName.value = 'Kapila De Silva';
 
                 paymentProofGroup.style.display = 'none';
                 paymentProofInput.required = false;
@@ -685,34 +682,43 @@
 
             const sendFormData = (base64Data = '', fileName = '', fileMimeType = '') => {
                 const formData = new URLSearchParams();
-                const elements = form.elements;
-
-                // Standard input collection
-                for (let i = 0; i < elements.length; i++) {
-                    const el = elements[i];
-                    if (el.name && !el.disabled && el.type !== 'checkbox' && el.type !== 'radio') {
-                        formData.append(el.name, el.value);
-                    }
-                }
+                
+                // Collect standard basic inputs
+                formData.append('fullName', form.querySelector('[name="fullName"]').value);
+                formData.append('contactNumber', form.querySelector('[name="contactNumber"]').value);
+                formData.append('whatsAppNumber', form.querySelector('[name="whatsAppNumber"]').value);
+                formData.append('dob', form.querySelector('[name="dob"]').value);
+                formData.append('address', form.querySelector('[name="address"]').value);
+                formData.append('churchCategory', selectedChurch);
+                formData.append('languagePreference', form.querySelector('[name="languagePreference"]').value);
+                formData.append('gender', form.querySelector('[name="gender"]').value);
+                formData.append('email', form.querySelector('[name="email"]').value);
+                formData.append('foodPreference', form.querySelector('[name="foodPreference"]').value);
+                formData.append('tshirtSize', form.querySelector('[name="tshirtSize"]').value);
+                formData.append('worshipRole', form.querySelector('[name="worshipRole"]').value);
 
                 // Checkbox collection
-                const checkboxes = form.querySelectorAll('input[type="checkbox"]:checked');
-                checkboxes.forEach(cb => {
-                    formData.append(cb.name, cb.value);
-                });
+                const nonVegChoices = Array.from(form.querySelectorAll('input[name="nonVegChoice"]:checked')).map(c => c.value).join(', ');
+                formData.append('nonVegChoice', nonVegChoices);
 
-                // Explicitly send values based on selected category to ensure no fields are lost
+                const worshipInstruments = Array.from(form.querySelectorAll('input[name="worshipInstruments"]:checked')).map(c => c.value).join(', ');
+                formData.append('worshipInstruments', worshipInstruments);
+
+                // Pastor & Church location logic
                 if (selectedChurch === 'AOG') {
                     formData.append('aogChurchName', aogChurchName.value);
                     formData.append('aogDistrict', aogDistrict.value);
+                    formData.append('pastorName', pastorName.value);
                 } else if (selectedChurch === 'Non-AOG') {
                     formData.append('nonAogChurchName', nonAogChurchName.value);
                     formData.append('nonAogSuburbCity', nonAogSuburbCity.value);
                     formData.append('nonAogDistrict', nonAogDistrict.value);
+                    formData.append('pastorName', pastorName.value);
                 } else if (selectedChurch === 'The Revelation International') {
+                    formData.append('nonAogChurchName', 'The Revelation International');
                     formData.append('nonAogSuburbCity', 'Mount Lavinia');
                     formData.append('nonAogDistrict', 'Colombo');
-                    formData.append('pastorName', 'Pastor Kapila De Silva');
+                    formData.append('pastorName', 'Kapila De Silva');
                 }
 
                 if (base64Data) {
@@ -728,11 +734,11 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.result === 'success') {
-                        const modalContact = document.getElementById('modalContactInfo');
+                        const modalContact = document.getElementById('modalContactText');
                         if (selectedChurch === 'The Revelation International') {
-                            modalContact.innerHTML = '<i class="fa-solid fa-phone"></i> For further details, please contact Church phone +94 777 060 432 or +94 760 990 247';
+                            modalContact.innerText = 'For further details, please contact Church phone +94 777 060 432 or +94 760 990 247';
                         } else {
-                            modalContact.innerHTML = '<i class="fa-solid fa-phone"></i> For further details, please contact Pastor Kithmal Perera +94 773 634 548';
+                            modalContact.innerText = 'For further details, please contact Pastor Kithmal Perera +94 773 634 548';
                         }
 
                         document.getElementById('successModal').style.display = 'flex';

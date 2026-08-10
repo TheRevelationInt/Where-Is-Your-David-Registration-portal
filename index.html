@@ -440,7 +440,7 @@
                 </div>
             </div>
 
-            <!-- Conditional Section for Non-AOG & TRI -->
+            <!-- Conditional Section for Non-AOG -->
             <div id="nonAogSection" class="conditional-section">
                 <div class="form-group" id="nonAogChurchNameGroup">
                     <label><i class="fa-solid fa-signature"></i> Church Name</label>
@@ -605,6 +605,7 @@
             });
 
             pastorName.value = '';
+            pastorName.disabled = false;
 
             if (this.value === 'AOG') {
                 aogSection.style.display = 'block';
@@ -621,12 +622,9 @@
                 paymentProofInput.required = true;
 
             } else if (this.value === 'The Revelation International') {
-                nonAogSection.style.display = 'block';
-                nonAogChurchNameGroup.style.display = 'none'; 
-
-                nonAogSuburbCity.value = 'Mount Lavinia';
-                nonAogDistrict.value = 'Colombo';
+                // Suburb & District remain hidden from the UI
                 pastorName.value = 'Kapila De Silva';
+                pastorName.disabled = true;
 
                 paymentProofGroup.style.display = 'none';
                 paymentProofInput.required = false;
@@ -716,8 +714,8 @@
                     formData.append('pastorName', pastorName.value);
                 } else if (selectedChurch === 'The Revelation International') {
                     formData.append('nonAogChurchName', 'The Revelation International');
-                    formData.append('nonAogSuburbCity', 'Mount Lavinia');
-                    formData.append('nonAogDistrict', 'Colombo');
+                    formData.append('nonAogSuburbCity', 'N/A');
+                    formData.append('nonAogDistrict', 'N/A');
                     formData.append('pastorName', 'Kapila De Silva');
                 }
 
@@ -743,6 +741,7 @@
 
                         document.getElementById('successModal').style.display = 'flex';
                         form.reset();
+                        pastorName.disabled = false;
                         aogSection.style.display = 'none';
                         nonAogSection.style.display = 'none';
                         nonVegOptions.style.display = 'none';

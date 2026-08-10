@@ -164,7 +164,7 @@
             background-color: rgba(59, 0, 102, 0.8);
         }
 
-        .form-control:disabled {
+        .form-control:read-only {
             opacity: 0.7;
             cursor: not-allowed;
             background-color: rgba(10, 0, 20, 0.7);
@@ -288,7 +288,6 @@
             text-transform: uppercase;
         }
 
-        /* Success Modal Styles */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -536,7 +535,6 @@
                 </div>
             </div>
 
-            <!-- Payment Proof Attachment Section -->
             <div class="form-group" id="paymentProofGroup">
                 <label><i class="fa-solid fa-file-invoice-dollar"></i> Upload Payment Proof (Bank Slip or Online Transfer Slip)</label>
                 <input type="file" id="paymentProof" class="form-control" accept=".pdf, .png, .jpg, .jpeg">
@@ -553,13 +551,12 @@
         </div>
     </div>
 
-    <!-- Custom Success Modal -->
     <div id="successModal" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-item main-title">✅ Registration Successful!</div>
-            <div class="modal-item">📅 See you on 23rd of October</div>
-            <div class="modal-item">📍 At MAS Fabric Park, Thulhiriya</div>
-            <div class="modal-item" id="modalContactInfo">📞 For further details, please contact Pastor Kithmal Perera +94 773 634 548</div>
+            <div class="modal-item main-title"> Registration Successful!</div>
+            <div class="modal-item"> See you on 23rd of October</div>
+            <div class="modal-item"> At MAS Fabric Park, Thulhiriya</div>
+            <div class="modal-item" id="modalContactInfo"> For further details, please contact Pastor Kithmal Perera +94 773 634 548</div>
             <button onclick="closeModal()" class="btn-modal-close">OK</button>
         </div>
     </div>
@@ -582,7 +579,6 @@
         const nonAogInputs = nonAogSection.querySelectorAll('input');
 
         churchCategory.addEventListener('change', function() {
-            // Reset state
             aogSection.style.display = 'none';
             nonAogSection.style.display = 'none';
             nonAogChurchNameGroup.style.display = 'block';
@@ -591,11 +587,11 @@
             nonAogInputs.forEach(input => { 
                 input.required = false; 
                 input.value = ''; 
-                input.disabled = false;
+                input.readOnly = false;
             });
 
             pastorName.value = '';
-            pastorName.disabled = false;
+            pastorName.readOnly = false;
 
             if (this.value === 'AOG') {
                 aogSection.style.display = 'block';
@@ -613,16 +609,16 @@
 
             } else if (this.value === 'The Revelation International') {
                 nonAogSection.style.display = 'block';
-                nonAogChurchNameGroup.style.display = 'none'; // Hide independent church name input for TRI
+                nonAogChurchNameGroup.style.display = 'none'; 
 
-                nonAogSuburbCity.value = 'Mount Lavinia';
-                nonAogSuburbCity.disabled = true;
+                nonAogSuburbCity.value = 'N/A';
+                nonAogSuburbCity.readOnly = true;
 
                 nonAogDistrict.value = 'Colombo';
-                nonAogDistrict.disabled = true;
+                nonAogDistrict.readOnly = true;
 
-                pastorName.value = 'Pastor Kapila De Silva';
-                pastorName.disabled = true;
+                pastorName.value = 'Kapila De Silva';
+                pastorName.readOnly = true;
 
                 paymentProofGroup.style.display = 'none';
                 paymentProofInput.required = false;
@@ -677,29 +673,7 @@
             }
 
             const sendFormData = (base64Data = '', fileName = '', fileMimeType = '') => {
-                const formData = new URLSearchParams();
-                const elements = form.elements;
-
-                // Explicitly gather values including disabled ones
-                for (let i = 0; i < elements.length; i++) {
-                    const el = elements[i];
-                    if (el.name && !el.disabled && el.type !== 'checkbox' && el.type !== 'radio') {
-                        formData.append(el.name, el.value);
-                    }
-                }
-
-                // Handle checkboxes separately
-                const checkboxes = form.querySelectorAll('input[type="checkbox"]:checked');
-                checkboxes.forEach(cb => {
-                    formData.append(cb.name, cb.value);
-                });
-
-                // Append disabled auto-filled values explicitly if needed
-                if (selectedChurch === 'The Revelation International') {
-                    formData.append('nonAogSuburbCity', 'Mount Lavinia');
-                    formData.append('nonAogDistrict', 'Colombo');
-                    formData.append('pastorName', 'Pastor Kapila De Silva');
-                }
+                const formData = new URLSearchParams(new FormData(form));
 
                 if (base64Data) {
                     formData.append('fileData', base64Data);
@@ -714,12 +688,11 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.result === 'success') {
-                        // Customize modal contact number based on church choice
                         const modalContact = document.getElementById('modalContactInfo');
                         if (selectedChurch === 'The Revelation International') {
-                            modalContact.innerHTML = '📞 For further details, please contact Church phone +94 777 060 432 or +94 760 990 247';
+                            modalContact.innerHTML = ' For further details, please contact Church phone +94 777 060 432 or +94 760 990 247';
                         } else {
-                            modalContact.innerHTML = '📞 For further details, please contact Pastor Kithmal Perera +94 773 634 548';
+                            modalContact.innerHTML = ' For further details, please contact Pastor Kithmal Perera +94 773 634 548';
                         }
 
                         document.getElementById('successModal').style.display = 'flex';

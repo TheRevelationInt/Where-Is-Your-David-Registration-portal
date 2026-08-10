@@ -164,7 +164,7 @@
             background-color: rgba(59, 0, 102, 0.8);
         }
 
-        .form-control:read-only {
+        .form-control:disabled {
             opacity: 0.7;
             cursor: not-allowed;
             background-color: rgba(10, 0, 20, 0.7);
@@ -288,6 +288,7 @@
             text-transform: uppercase;
         }
 
+        /* Success Modal Styles */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -326,6 +327,11 @@
             border-bottom: 1px solid rgba(204, 164, 59, 0.3);
             padding-bottom: 10px;
             margin-bottom: 15px;
+        }
+
+        .modal-item i {
+            margin-right: 10px;
+            color: var(--primary-gold);
         }
 
         .btn-modal-close {
@@ -535,6 +541,7 @@
                 </div>
             </div>
 
+            <!-- Payment Proof Attachment Section -->
             <div class="form-group" id="paymentProofGroup">
                 <label><i class="fa-solid fa-file-invoice-dollar"></i> Upload Payment Proof (Bank Slip or Online Transfer Slip)</label>
                 <input type="file" id="paymentProof" class="form-control" accept=".pdf, .png, .jpg, .jpeg">
@@ -551,12 +558,13 @@
         </div>
     </div>
 
+    <!-- Custom Success Modal -->
     <div id="successModal" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-item main-title"> Registration Successful!</div>
-            <div class="modal-item"> See you on 23rd of October</div>
-            <div class="modal-item"> At MAS Fabric Park, Thulhiriya</div>
-            <div class="modal-item" id="modalContactInfo"> For further details, please contact Pastor Kithmal Perera +94 773 634 548</div>
+            <div class="modal-item main-title"><i class="fa-solid fa-circle-check"></i> Registration Successful!</div>
+            <div class="modal-item"><i class="fa-solid fa-calendar-check"></i> See you on 23rd of October</div>
+            <div class="modal-item"><i class="fa-solid fa-location-dot"></i> At MAS Fabric Park, Thulhiriya</div>
+            <div class="modal-item" id="modalContactInfo"><i class="fa-solid fa-phone"></i> For further details, please contact Pastor Kithmal Perera +94 773 634 548</div>
             <button onclick="closeModal()" class="btn-modal-close">OK</button>
         </div>
     </div>
@@ -567,6 +575,8 @@
         const nonAogSection = document.getElementById('nonAogSection');
         const nonAogChurchNameGroup = document.getElementById('nonAogChurchNameGroup');
         
+        const aogChurchName = document.getElementById('aogChurchName');
+        const aogDistrict = document.getElementById('aogDistrict');
         const nonAogChurchName = document.getElementById('nonAogChurchName');
         const nonAogSuburbCity = document.getElementById('nonAogSuburbCity');
         const nonAogDistrict = document.getElementById('nonAogDistrict');
@@ -579,6 +589,7 @@
         const nonAogInputs = nonAogSection.querySelectorAll('input');
 
         churchCategory.addEventListener('change', function() {
+            // Reset state
             aogSection.style.display = 'none';
             nonAogSection.style.display = 'none';
             nonAogChurchNameGroup.style.display = 'block';
@@ -587,11 +598,11 @@
             nonAogInputs.forEach(input => { 
                 input.required = false; 
                 input.value = ''; 
-                input.readOnly = false;
+                input.disabled = false;
             });
 
             pastorName.value = '';
-            pastorName.readOnly = false;
+            pastorName.disabled = false;
 
             if (this.value === 'AOG') {
                 aogSection.style.display = 'block';
@@ -611,14 +622,14 @@
                 nonAogSection.style.display = 'block';
                 nonAogChurchNameGroup.style.display = 'none'; 
 
-                nonAogSuburbCity.value = 'N/A';
-                nonAogSuburbCity.readOnly = true;
+                nonAogSuburbCity.value = 'Mount Lavinia';
+                nonAogSuburbCity.disabled = true;
 
                 nonAogDistrict.value = 'Colombo';
-                nonAogDistrict.readOnly = true;
+                nonAogDistrict.disabled = true;
 
-                pastorName.value = 'Kapila De Silva';
-                pastorName.readOnly = true;
+                pastorName.value = 'Pastor Kapila De Silva';
+                pastorName.disabled = true;
 
                 paymentProofGroup.style.display = 'none';
                 paymentProofInput.required = false;
@@ -673,7 +684,36 @@
             }
 
             const sendFormData = (base64Data = '', fileName = '', fileMimeType = '') => {
-                const formData = new URLSearchParams(new FormData(form));
+                const formData = new URLSearchParams();
+                const elements = form.elements;
+
+                // Standard input collection
+                for (let i = 0; i < elements.length; i++) {
+                    const el = elements[i];
+                    if (el.name && !el.disabled && el.type !== 'checkbox' && el.type !== 'radio') {
+                        formData.append(el.name, el.value);
+                    }
+                }
+
+                // Checkbox collection
+                const checkboxes = form.querySelectorAll('input[type="checkbox"]:checked');
+                checkboxes.forEach(cb => {
+                    formData.append(cb.name, cb.value);
+                });
+
+                // Explicitly send values based on selected category to ensure no fields are lost
+                if (selectedChurch === 'AOG') {
+                    formData.append('aogChurchName', aogChurchName.value);
+                    formData.append('aogDistrict', aogDistrict.value);
+                } else if (selectedChurch === 'Non-AOG') {
+                    formData.append('nonAogChurchName', nonAogChurchName.value);
+                    formData.append('nonAogSuburbCity', nonAogSuburbCity.value);
+                    formData.append('nonAogDistrict', nonAogDistrict.value);
+                } else if (selectedChurch === 'The Revelation International') {
+                    formData.append('nonAogSuburbCity', 'Mount Lavinia');
+                    formData.append('nonAogDistrict', 'Colombo');
+                    formData.append('pastorName', 'Pastor Kapila De Silva');
+                }
 
                 if (base64Data) {
                     formData.append('fileData', base64Data);
@@ -690,9 +730,9 @@
                     if (data.result === 'success') {
                         const modalContact = document.getElementById('modalContactInfo');
                         if (selectedChurch === 'The Revelation International') {
-                            modalContact.innerHTML = ' For further details, please contact Church phone +94 777 060 432 or +94 760 990 247';
+                            modalContact.innerHTML = '<i class="fa-solid fa-phone"></i> For further details, please contact Church phone +94 777 060 432 or +94 760 990 247';
                         } else {
-                            modalContact.innerHTML = ' For further details, please contact Pastor Kithmal Perera +94 773 634 548';
+                            modalContact.innerHTML = '<i class="fa-solid fa-phone"></i> For further details, please contact Pastor Kithmal Perera +94 773 634 548';
                         }
 
                         document.getElementById('successModal').style.display = 'flex';

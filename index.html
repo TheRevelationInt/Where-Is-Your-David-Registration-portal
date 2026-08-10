@@ -88,12 +88,12 @@
         }
 
         .banner-img {
-            max-width: 75%; /* Adjust this percentage (e.g., 50%, 70%) or set a fixed max-width like 300px */
-            height: auto;     /* Maintains correct aspect ratio */
+            max-width: 75%;
+            height: auto;
             border-radius: 8px;
             border: none;
             margin: 0 auto;
-            display: block;   /* Keeps the image properly centered */
+            display: block;
         }
 
         .header-section {
@@ -162,6 +162,12 @@
             border-color: var(--primary-gold);
             box-shadow: 0 0 10px rgba(204, 164, 59, 0.4);
             background-color: rgba(59, 0, 102, 0.8);
+        }
+
+        .form-control:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            background-color: rgba(10, 0, 20, 0.7);
         }
 
         select.form-control option {
@@ -405,10 +411,11 @@
                     <option value="" disabled selected>Select your church</option>
                     <option value="AOG">1. AOG</option>
                     <option value="Non-AOG">2. Non-AOG</option>
+                    <option value="The Revelation International">3. The Revelation International</option>
                 </select>
             </div>
 
-            <!-- Conditional Section for AOG (Suburb/City removed) -->
+            <!-- Conditional Section for AOG -->
             <div id="aogSection" class="conditional-section">
                 <div class="form-group">
                     <label><i class="fa-solid fa-signature"></i> Church Name</label>
@@ -423,9 +430,9 @@
                 </div>
             </div>
 
-            <!-- Conditional Section for Non-AOG -->
+            <!-- Conditional Section for Non-AOG & TRI -->
             <div id="nonAogSection" class="conditional-section">
-                <div class="form-group">
+                <div class="form-group" id="nonAogChurchNameGroup">
                     <label><i class="fa-solid fa-signature"></i> Church Name</label>
                     <input type="text" name="nonAogChurchName" id="nonAogChurchName" class="form-control" placeholder="Enter Non-AOG Church name">
                 </div>
@@ -443,7 +450,7 @@
                 <label><i class="fa-solid fa-user-tie"></i> Church Pastor's Name</label>
                 <div class="input-with-prefix">
                     <span class="input-prefix-text">Pastor -</span>
-                    <input type="text" name="pastorName" class="form-control" placeholder="Enter your Pastor's name" required>
+                    <input type="text" name="pastorName" id="pastorName" class="form-control" placeholder="Enter your Pastor's name" required>
                 </div>
             </div>
 
@@ -530,9 +537,9 @@
             </div>
 
             <!-- Payment Proof Attachment Section -->
-            <div class="form-group">
+            <div class="form-group" id="paymentProofGroup">
                 <label><i class="fa-solid fa-file-invoice-dollar"></i> Upload Payment Proof (Bank Slip or Online Transfer Slip)</label>
-                <input type="file" id="paymentProof" class="form-control" accept=".pdf, .png, .jpg, .jpeg" required>
+                <input type="file" id="paymentProof" class="form-control" accept=".pdf, .png, .jpg, .jpeg">
                 <span class="file-hint">Accepted Formats: PDF, PNG, JPG, JPEG (Max file size: 10MB)</span>
             </div>
 
@@ -552,7 +559,7 @@
             <div class="modal-item main-title">✅ Registration Successful!</div>
             <div class="modal-item">📅 See you on 23rd of October</div>
             <div class="modal-item">📍 At MAS Fabric Park, Thulhiriya</div>
-            <div class="modal-item">📞 For further details, please contact Pastor Kithmal Perera +94 773 634 548</div>
+            <div class="modal-item" id="modalContactInfo">📞 For further details, please contact Pastor Kithmal Perera +94 773 634 548</div>
             <button onclick="closeModal()" class="btn-modal-close">OK</button>
         </div>
     </div>
@@ -561,34 +568,65 @@
         const churchCategory = document.getElementById('churchCategory');
         const aogSection = document.getElementById('aogSection');
         const nonAogSection = document.getElementById('nonAogSection');
+        const nonAogChurchNameGroup = document.getElementById('nonAogChurchNameGroup');
+        
+        const nonAogChurchName = document.getElementById('nonAogChurchName');
+        const nonAogSuburbCity = document.getElementById('nonAogSuburbCity');
+        const nonAogDistrict = document.getElementById('nonAogDistrict');
+        const pastorName = document.getElementById('pastorName');
+        
+        const paymentProofGroup = document.getElementById('paymentProofGroup');
+        const paymentProofInput = document.getElementById('paymentProof');
 
         const aogInputs = aogSection.querySelectorAll('input');
         const nonAogInputs = nonAogSection.querySelectorAll('input');
 
         churchCategory.addEventListener('change', function() {
+            // Reset state
+            aogSection.style.display = 'none';
+            nonAogSection.style.display = 'none';
+            nonAogChurchNameGroup.style.display = 'block';
+
+            aogInputs.forEach(input => { input.required = false; input.value = ''; });
+            nonAogInputs.forEach(input => { 
+                input.required = false; 
+                input.value = ''; 
+                input.disabled = false;
+            });
+
+            pastorName.value = '';
+            pastorName.disabled = false;
+
             if (this.value === 'AOG') {
                 aogSection.style.display = 'block';
-                nonAogSection.style.display = 'none';
-                
                 aogInputs.forEach(input => input.required = true);
-                nonAogInputs.forEach(input => {
-                    input.required = false;
-                    input.value = '';
-                });
-            } else if (this.value === 'Non-AOG') {
-                aogSection.style.display = 'none';
-                nonAogSection.style.display = 'block';
 
+                paymentProofGroup.style.display = 'block';
+                paymentProofInput.required = true;
+
+            } else if (this.value === 'Non-AOG') {
+                nonAogSection.style.display = 'block';
                 nonAogInputs.forEach(input => input.required = true);
-                aogInputs.forEach(input => {
-                    input.required = false;
-                    input.value = '';
-                });
-            } else {
-                aogSection.style.display = 'none';
-                nonAogSection.style.display = 'none';
-                aogInputs.forEach(input => { input.required = false; input.value = ''; });
-                nonAogInputs.forEach(input => { input.required = false; input.value = ''; });
+
+                paymentProofGroup.style.display = 'block';
+                paymentProofInput.required = true;
+
+            } else if (this.value === 'The Revelation International') {
+                nonAogSection.style.display = 'block';
+                nonAogChurchNameGroup.style.display = 'none'; // Hide independent church name input for TRI
+
+                nonAogSuburbCity.value = 'Mount Lavinia';
+                nonAogSuburbCity.disabled = true;
+
+                nonAogDistrict.value = 'Colombo';
+                nonAogDistrict.disabled = true;
+
+                pastorName.value = 'Pastor Kapila De Silva';
+                pastorName.disabled = true;
+
+                paymentProofGroup.style.display = 'none';
+                paymentProofInput.required = false;
+                paymentProofInput.value = '';
             }
         });
 
@@ -627,24 +665,47 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = "Processing...";
 
+            const selectedChurch = churchCategory.value;
             const fileInput = document.getElementById('paymentProof');
             const file = fileInput.files[0];
 
-            if (!file) {
+            if ((selectedChurch === 'AOG' || selectedChurch === 'Non-AOG') && !file) {
                 alert('Please select a payment proof file to upload.');
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
                 return;
             }
 
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                const base64Data = evt.target.result;
-                const formData = new URLSearchParams(new FormData(form));
+            const sendFormData = (base64Data = '', fileName = '', fileMimeType = '') => {
+                const formData = new URLSearchParams();
+                const elements = form.elements;
 
-                formData.append('fileData', base64Data);
-                formData.append('fileName', file.name);
-                formData.append('fileMimeType', file.type);
+                // Explicitly gather values including disabled ones
+                for (let i = 0; i < elements.length; i++) {
+                    const el = elements[i];
+                    if (el.name && !el.disabled && el.type !== 'checkbox' && el.type !== 'radio') {
+                        formData.append(el.name, el.value);
+                    }
+                }
+
+                // Handle checkboxes separately
+                const checkboxes = form.querySelectorAll('input[type="checkbox"]:checked');
+                checkboxes.forEach(cb => {
+                    formData.append(cb.name, cb.value);
+                });
+
+                // Append disabled auto-filled values explicitly if needed
+                if (selectedChurch === 'The Revelation International') {
+                    formData.append('nonAogSuburbCity', 'Mount Lavinia');
+                    formData.append('nonAogDistrict', 'Colombo');
+                    formData.append('pastorName', 'Pastor Kapila De Silva');
+                }
+
+                if (base64Data) {
+                    formData.append('fileData', base64Data);
+                    formData.append('fileName', fileName);
+                    formData.append('fileMimeType', fileMimeType);
+                }
 
                 fetch(form.action, {
                     method: 'POST',
@@ -653,12 +714,21 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.result === 'success') {
+                        // Customize modal contact number based on church choice
+                        const modalContact = document.getElementById('modalContactInfo');
+                        if (selectedChurch === 'The Revelation International') {
+                            modalContact.innerHTML = '📞 For further details, please contact Church phone +94 777 060 432 or +94 760 990 247';
+                        } else {
+                            modalContact.innerHTML = '📞 For further details, please contact Pastor Kithmal Perera +94 773 634 548';
+                        }
+
                         document.getElementById('successModal').style.display = 'flex';
                         form.reset();
                         aogSection.style.display = 'none';
                         nonAogSection.style.display = 'none';
                         nonVegOptions.style.display = 'none';
                         instrumentOptions.style.display = 'none';
+                        paymentProofGroup.style.display = 'block';
                     } else {
                         alert('Error saving data: ' + (data.error || 'Unknown error'));
                     }
@@ -666,13 +736,21 @@
                     submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
                 })
                 .catch(error => {
-                    alert('Something went wrong. Please try again. Please contact Pastor Kithmal Perera +94 773 634 548');
+                    alert('Something went wrong. Please try again.');
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
                 });
             };
 
-            reader.readAsDataURL(file);
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    sendFormData(evt.target.result, file.name, file.type);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                sendFormData();
+            }
         });
     </script>
 </body>

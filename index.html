@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Where Is Your David? - Youth Camp Registration</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Yellowtail:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-gold: #cca43b;
@@ -88,14 +88,28 @@
             padding-bottom: 20px;
         }
 
-        .header-section h1 {
-            font-family: 'Cinzel Decorative', serif;
-            color: var(--primary-gold);
-            font-size: 42px;
+        .header-section .title-small {
+            font-family: 'Cinzel', serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin: 0;
+            line-height: 1.1;
+            background: linear-gradient(180deg, #fff5d6 0%, var(--primary-gold) 60%, var(--dark-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 12px rgba(204, 164, 59, 0.4);
+        }
+
+        .header-section .title-main {
+            font-family: 'Cinzel', serif;
+            font-size: 38px;
             font-weight: 800;
             letter-spacing: 1px;
-            margin: 8px 0;
+            margin: 4px 0 0 0;
             text-transform: uppercase;
+            line-height: 1.1;
             background: linear-gradient(180deg, #fff5d6 0%, var(--primary-gold) 60%, var(--dark-gold) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -103,11 +117,15 @@
             filter: drop-shadow(0px 3px 4px rgba(0,0,0,0.6));
         }
 
-        .header-section h1.anointed-title {
-            font-family: 'Yellowtail', cursive;
+        .header-section .title-script {
+            font-family: 'Great Vibes', cursive;
+            font-size: 46px;
+            color: #fff5d6;
+            margin: -5px 0 10px 0;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(204, 164, 59, 0.5);
+            font-weight: normal;
             text-transform: none;
-            font-size: 42px;
-            margin-top: 0px;
         }
 
         .header-section h2 {
@@ -359,11 +377,14 @@
                 padding: 24px 16px;
                 border-radius: 12px;
             }
-            .header-section h1 {
-                font-size: 25px;
+            .header-section .title-small {
+                font-size: 18px;
             }
-            .header-section h1.anointed-title {
-                font-size: 32px;
+            .header-section .title-main {
+                font-size: 26px;
+            }
+            .header-section .title-script {
+                font-size: 34px;
             }
         }
     </style>
@@ -372,10 +393,12 @@
     <div class="bg-glow"></div>
     
     <div class="portal-container">
+
         <div class="header-section">
-            <h1>Where Is Your David?</h1>
-            <h1 class="anointed-title">Anointed One</h1>
-            <h2 style="color: var(--primary-gold); letter-spacing: 4px;">YOUTH CAMP REGISTRATION</h2>
+            <div class="title-small">WHERE</div>
+            <div class="title-main">IS YOUR DAVID?</div>
+            <div class="title-script">Anointed One</div>
+            <h2 style="color: var(--primary-gold); letter-spacing: 4px; margin-top: 15px;">YOUTH CAMP REGISTRATION</h2>
             <h2>Organized by Joshua's Force</h2>
         </div>
 

@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Where Is Your David? - Youth Camp Registration</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Satisfy&display=swap" rel="stylesheet">
+    <!-- Font loading for Berow (with Cursive fallbacks) -->
+    <link href="https://fonts.cdnfonts.com/css/berow" rel="stylesheet">
+    
     <style>
         :root {
             --primary-gold: #cca43b;
@@ -81,6 +83,7 @@
             box-sizing: border-box;
         }
 
+        /* HEADER & TYPOGRAPHY SECTION */
         .header-section {
             text-align: center;
             margin-bottom: 30px;
@@ -88,45 +91,56 @@
             padding-bottom: 20px;
         }
 
+        .header-title-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Left-aligned stack for WHERE IS YOUR DAVID? */
+            margin: 0 auto 10px auto;
+            max-width: fit-content;
+        }
+
         .header-section .title-small {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 20px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
             margin: 0;
-            line-height: 1.1;
+            line-height: 1;
             background: linear-gradient(180deg, #fff5d6 0%, var(--primary-gold) 60%, var(--dark-gold) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 12px rgba(204, 164, 59, 0.4);
+            text-align: left;
         }
 
         .header-section .title-main {
-            font-family: 'Cinzel Decorative', serif;
-            font-size: 34px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 38px;
             font-weight: 900;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             margin: 4px 0 0 0;
             text-transform: uppercase;
-            line-height: 1.15;
+            line-height: 1.1;
             background: linear-gradient(180deg, #fff5d6 0%, var(--primary-gold) 60%, var(--dark-gold) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 12px rgba(204, 164, 59, 0.4), 0 0 25px rgba(204, 164, 59, 0.15);
             filter: drop-shadow(0px 3px 4px rgba(0,0,0,0.6));
+            text-align: left;
         }
 
         .header-section .title-script {
-            font-family: 'Satisfy', cursive;
-            font-size: 48px;
+            font-family: 'Berow', 'Brush Script MT', cursive;
+            font-size: 52px;
             color: #fff5d6;
-            margin: 5px 0 10px 0;
-            letter-spacing: 0px;
+            margin: 10px 0 5px 0;
+            letter-spacing: 1px;
             text-shadow: 0 0 12px rgba(204, 164, 59, 0.5);
             font-weight: normal;
             text-transform: none;
             line-height: 1;
+            text-align: center;
         }
 
         .header-section h2 {
@@ -136,8 +150,10 @@
             margin: 5px 0;
             letter-spacing: 3px;
             text-transform: uppercase;
+            text-align: center;
         }
 
+        /* FORM STYLING */
         .form-group {
             margin-bottom: 22px;
             position: relative;
@@ -299,7 +315,7 @@
             text-transform: uppercase;
         }
 
-        /* Success Modal Styles */
+        /* Modal Styles */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -379,13 +395,13 @@
                 border-radius: 12px;
             }
             .header-section .title-small {
-                font-size: 16px;
+                font-size: 18px;
             }
             .header-section .title-main {
-                font-size: 24px;
+                font-size: 28px;
             }
             .header-section .title-script {
-                font-size: 38px;
+                font-size: 40px;
             }
         }
     </style>
@@ -395,14 +411,18 @@
     
     <div class="portal-container">
 
+        <!-- HEADER SECTION -->
         <div class="header-section">
-            <div class="title-small">WHERE</div>
-            <div class="title-main">IS YOUR DAVID?</div>
+            <div class="header-title-wrapper">
+                <div class="title-small">WHERE</div>
+                <div class="title-main">IS YOUR DAVID?</div>
+            </div>
             <div class="title-script">Anointed One</div>
             <h2 style="color: var(--primary-gold); letter-spacing: 4px; margin-top: 20px;">YOUTH CAMP REGISTRATION</h2>
             <h2>Organized by Joshua's Force</h2>
         </div>
 
+        <!-- REGISTRATION FORM -->
         <form id="registrationForm" action="https://script.google.com/macros/s/AKfycbwEmWYKSNECqzlcopeQNGO6L3x9YTG5T72rOLzyAcwt4IAqd8bA9Ox3oiTeEBg9pAoP5Q/exec" method="POST">
             
             <div class="form-group">
@@ -430,7 +450,6 @@
                 <input name="address" class="form-control" placeholder="Enter your full address" required>
             </div>
 
-            <!-- Church Question Section -->
             <div class="form-group">
                 <label><i class="fa-solid fa-church"></i> Church</label>
                 <select name="churchCategory" id="churchCategory" class="form-control" required>
@@ -441,7 +460,6 @@
                 </select>
             </div>
 
-            <!-- Conditional Section for AOG -->
             <div id="aogSection" class="conditional-section">
                 <div class="form-group">
                     <label><i class="fa-solid fa-signature"></i> Church Name</label>
@@ -456,7 +474,6 @@
                 </div>
             </div>
 
-            <!-- Conditional Section for Non-AOG -->
             <div id="nonAogSection" class="conditional-section">
                 <div class="form-group" id="nonAogChurchNameGroup">
                     <label><i class="fa-solid fa-signature"></i> Church Name</label>
@@ -562,7 +579,6 @@
                 </div>
             </div>
 
-            <!-- Payment Proof Attachment Section -->
             <div class="form-group" id="paymentProofGroup">
                 <label><i class="fa-solid fa-file-invoice-dollar"></i> Upload Payment Proof (Bank Slip or Online Transfer Slip)</label>
                 <input type="file" id="paymentProof" class="form-control" accept=".pdf, .png, .jpg, .jpeg">
@@ -579,7 +595,7 @@
         </div>
     </div>
 
-    <!-- Custom Success Modal -->
+    <!-- SUCCESS MODAL -->
     <div id="successModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-item main-title"><i class="fa-solid fa-circle-check"></i> Registration Successful!</div>
@@ -638,7 +654,6 @@
                 paymentProofInput.required = true;
 
             } else if (this.value === 'The Revelation International') {
-                // Suburb & District remain hidden from the UI
                 pastorName.value = 'Kapila De Silva';
                 pastorName.disabled = true;
 
@@ -697,7 +712,6 @@
             const sendFormData = (base64Data = '', fileName = '', fileMimeType = '') => {
                 const formData = new URLSearchParams();
                 
-                // Collect standard basic inputs
                 formData.append('fullName', form.querySelector('[name="fullName"]').value);
                 formData.append('contactNumber', form.querySelector('[name="contactNumber"]').value);
                 formData.append('whatsAppNumber', form.querySelector('[name="whatsAppNumber"]').value);
@@ -711,14 +725,12 @@
                 formData.append('tshirtSize', form.querySelector('[name="tshirtSize"]').value);
                 formData.append('worshipRole', form.querySelector('[name="worshipRole"]').value);
 
-                // Checkbox collection
                 const nonVegChoices = Array.from(form.querySelectorAll('input[name="nonVegChoice"]:checked')).map(c => c.value).join(', ');
                 formData.append('nonVegChoice', nonVegChoices);
 
                 const worshipInstruments = Array.from(form.querySelectorAll('input[name="worshipInstruments"]:checked')).map(c => c.value).join(', ');
                 formData.append('worshipInstruments', worshipInstruments);
 
-                // Pastor & Church location logic
                 if (selectedChurch === 'AOG') {
                     formData.append('aogChurchName', aogChurchName.value);
                     formData.append('aogSuburbCity', 'N/A');

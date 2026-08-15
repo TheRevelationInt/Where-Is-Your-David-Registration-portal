@@ -604,7 +604,7 @@
         dobInput.addEventListener('change', function() {
             if (this.value) {
                 const birthYear = new Date(this.value).getFullYear();
-                if (birthYear <= 2010) {
+                if (birthYear <= 2009) {
                     nicSection.style.display = 'block';
                     nicNumber.required = true;
                 } else {

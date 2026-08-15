@@ -504,6 +504,12 @@
                 </select>
             </div>
 
+            <!-- Optional Email Address Field -->
+            <div class="form-group">
+                <label><i class="fa-solid fa-envelope"></i> Email Address (Optional)</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email address">
+            </div>
+
             <div class="form-group">
                 <label><i class="fa-solid fa-utensils"></i> Food Preference</label>
                 <select name="foodPreference" id="foodPreference" class="form-control" required>
@@ -729,6 +735,7 @@
                 formData.append('churchCategory', selectedChurch);
                 formData.append('languagePreference', form.querySelector('[name="languagePreference"]').value);
                 formData.append('gender', form.querySelector('[name="gender"]').value);
+                formData.append('email', form.querySelector('[name="email"]').value || 'N/A');
                 formData.append('foodPreference', form.querySelector('[name="foodPreference"]').value);
                 formData.append('tshirtSize', form.querySelector('[name="tshirtSize"]').value);
                 formData.append('worshipRole', form.querySelector('[name="worshipRole"]').value);

@@ -421,7 +421,13 @@
 
             <div class="form-group">
                 <label><i class="fa-solid fa-calendar-days"></i> Date of Birth</label>
-                <input type="date" name="dob" class="form-control" required>
+                <input type="date" id="dobInput" name="dob" class="form-control" required>
+            </div>
+
+            <!-- Conditional NIC Number Section -->
+            <div id="nicSection" class="form-group" style="display: none;">
+                <label><i class="fa-solid fa-id-card"></i> NIC No (National ID No)</label>
+                <input type="text" id="nicNumber" name="nicNumber" class="form-control" placeholder="Enter your NIC number">
             </div>
 
             <div class="form-group">
@@ -590,6 +596,29 @@
     </div>
 
     <script>
+        // Date of Birth & NIC Visibility Logic
+        const dobInput = document.getElementById('dobInput');
+        const nicSection = document.getElementById('nicSection');
+        const nicNumber = document.getElementById('nicNumber');
+
+        dobInput.addEventListener('change', function() {
+            if (this.value) {
+                const birthYear = new Date(this.value).getFullYear();
+                if (birthYear <= 2010) {
+                    nicSection.style.display = 'block';
+                    nicNumber.required = true;
+                } else {
+                    nicSection.style.display = 'none';
+                    nicNumber.required = false;
+                    nicNumber.value = '';
+                }
+            } else {
+                nicSection.style.display = 'none';
+                nicNumber.required = false;
+                nicNumber.value = '';
+            }
+        });
+
         const churchCategory = document.getElementById('churchCategory');
         const aogSection = document.getElementById('aogSection');
         const nonAogSection = document.getElementById('nonAogSection');
@@ -701,6 +730,7 @@
                 formData.append('contactNumber', form.querySelector('[name="contactNumber"]').value);
                 formData.append('whatsAppNumber', form.querySelector('[name="whatsAppNumber"]').value);
                 formData.append('dob', form.querySelector('[name="dob"]').value);
+                formData.append('nicNumber', nicNumber.value || 'N/A');
                 formData.append('address', form.querySelector('[name="address"]').value);
                 formData.append('churchCategory', selectedChurch);
                 formData.append('languagePreference', form.querySelector('[name="languagePreference"]').value);
@@ -757,6 +787,8 @@
 
                         document.getElementById('successModal').style.display = 'flex';
                         form.reset();
+                        nicSection.style.display = 'none';
+                        nicNumber.required = false;
                         pastorName.disabled = false;
                         aogSection.style.display = 'none';
                         nonAogSection.style.display = 'none';

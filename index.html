@@ -505,11 +505,6 @@
             </div>
 
             <div class="form-group">
-                <label><i class="fa-solid fa-envelope"></i> Email (Optional)</label>
-                <input type="email" name="email" class="form-control" placeholder="Enter your email address">
-            </div>
-
-            <div class="form-group">
                 <label><i class="fa-solid fa-utensils"></i> Food Preference</label>
                 <select name="foodPreference" id="foodPreference" class="form-control" required>
                     <option value="" disabled selected>Select preference</option>
@@ -667,7 +662,6 @@
                 paymentProofInput.required = true;
 
             } else if (this.value === 'The Revelation International') {
-                // Suburb & District remain hidden from the UI
                 pastorName.value = 'Kapila De Silva';
                 pastorName.disabled = true;
 
@@ -736,7 +730,6 @@
                 formData.append('churchCategory', selectedChurch);
                 formData.append('languagePreference', form.querySelector('[name="languagePreference"]').value);
                 formData.append('gender', form.querySelector('[name="gender"]').value);
-                formData.append('email', form.querySelector('[name="email"]').value);
                 formData.append('foodPreference', form.querySelector('[name="foodPreference"]').value);
                 formData.append('tshirtSize', form.querySelector('[name="tshirtSize"]').value);
                 formData.append('worshipRole', form.querySelector('[name="worshipRole"]').value);
@@ -797,7 +790,7 @@
                         instrumentOptions.style.display = 'none';
                         paymentProofGroup.style.display = 'block';
                     } else {
-                        alert('Error saving data: ' + (data.error || 'Unknown error'));
+                        alert('Registration Error: ' + (data.error || 'Unknown error'));
                     }
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';

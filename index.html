@@ -427,7 +427,8 @@
             <!-- Conditional NIC Number Section -->
             <div id="nicSection" class="form-group" style="display: none;">
                 <label><i class="fa-solid fa-id-card"></i> NIC No (National ID No)</label>
-                <input type="text" id="nicNumber" name="nicNumber" class="form-control" placeholder="Enter your NIC number">
+                <input type="text" id="nicNumber" name="nicNumber" class="form-control" placeholder="e.g. 997173287V or 200664802168" minlength="10" maxlength="12" pattern="^([0-9]{9}[vVxX]|[0-9]{12})$" title="Enter a valid 10-character (9 numbers + V/X) or 12-digit NIC number">
+                <span class="file-hint">Format: 9 numbers + 'V'/'X' (10 chars) OR 12 numbers</span>
             </div>
 
             <div class="form-group">
@@ -602,6 +603,11 @@
         const nicSection = document.getElementById('nicSection');
         const nicNumber = document.getElementById('nicNumber');
 
+        // Auto-format and restrict NIC input real-time
+        nicNumber.addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+        });
+
         dobInput.addEventListener('change', function() {
             if (this.value) {
                 const birthYear = new Date(this.value).getFullYear();
@@ -707,6 +713,20 @@
         const form = document.getElementById('registrationForm');
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+
+            // Perform specific NIC validation before submission if active
+            if (nicNumber.required) {
+                const nicVal = nicNumber.value.trim();
+                const oldFormat = /^[0-9]{9}[vVxX]$/;
+                const newFormat = /^[0-9]{12}$/;
+
+                if (!oldFormat.test(nicVal) && !newFormat.test(nicVal)) {
+                    alert('Please enter a valid NIC number:\n- 9 numbers followed by "V" or "X" (10 characters)\n- OR 12 numbers');
+                    nicNumber.focus();
+                    return;
+                }
+            }
+
             const submitBtn = form.querySelector('.btn-register');
             submitBtn.disabled = true;
             submitBtn.innerHTML = "Processing...";

@@ -611,6 +611,13 @@
         dobInput.addEventListener('change', function() {
             if (this.value) {
                 const birthYear = new Date(this.value).getFullYear();
+                
+                // Rule: Check if the selected year is 2026
+                if (birthYear === 2026) {
+                    alert("Please select the actual year.");
+                }
+
+                // Existing logic for NIC display based on birth year
                 if (birthYear <= 2009) {
                     nicSection.style.display = 'block';
                     nicNumber.required = true;

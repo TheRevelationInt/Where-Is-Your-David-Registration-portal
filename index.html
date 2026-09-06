@@ -298,7 +298,6 @@
             text-transform: uppercase;
         }
 
-        /* Success Modal Styles */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -424,7 +423,6 @@
                 <input type="date" id="dobInput" name="dob" class="form-control" required>
             </div>
 
-            <!-- Conditional NIC Number Section -->
             <div id="nicSection" class="form-group" style="display: none;">
                 <label><i class="fa-solid fa-id-card"></i> NIC No (National ID No)</label>
                 <input type="text" id="nicNumber" name="nicNumber" class="form-control" placeholder="e.g. 123456789V or 123456789012" minlength="10" maxlength="12" pattern="^([0-9]{9}[vVxX]|[0-9]{12})$" title="Enter a valid 10-character (9 numbers + V/X) or 12-digit NIC number">
@@ -436,7 +434,6 @@
                 <input name="address" class="form-control" placeholder="Enter your full address" required>
             </div>
 
-            <!-- Church Question Section -->
             <div class="form-group">
                 <label><i class="fa-solid fa-church"></i> Church</label>
                 <select name="churchCategory" id="churchCategory" class="form-control" required>
@@ -447,7 +444,6 @@
                 </select>
             </div>
 
-            <!-- Conditional Section for AOG -->
             <div id="aogSection" class="conditional-section">
                 <div class="form-group">
                     <label><i class="fa-solid fa-signature"></i> Church Name</label>
@@ -462,7 +458,6 @@
                 </div>
             </div>
 
-            <!-- Conditional Section for Non-AOG -->
             <div id="nonAogSection" class="conditional-section">
                 <div class="form-group" id="nonAogChurchNameGroup">
                     <label><i class="fa-solid fa-signature"></i> Church Name</label>
@@ -505,7 +500,6 @@
                 </select>
             </div>
 
-            <!-- Optional Email Address Field -->
             <div class="form-group">
                 <label><i class="fa-solid fa-envelope"></i> Email Address (Optional)</label>
                 <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email address">
@@ -569,7 +563,6 @@
                 </div>
             </div>
 
-            <!-- Payment Proof Attachment Section -->
             <div class="form-group" id="paymentProofGroup">
                 <label><i class="fa-solid fa-file-invoice-dollar"></i> Upload Payment Proof (Bank Slip or Online Transfer Slip)</label>
                 <input type="file" id="paymentProof" class="form-control" accept=".pdf, .png, .jpg, .jpeg">
@@ -586,7 +579,6 @@
         </div>
     </div>
 
-    <!-- Custom Success Modal -->
     <div id="successModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-item main-title"><i class="fa-solid fa-circle-check"></i> Registration Successful!</div>
@@ -603,7 +595,6 @@
         const nicSection = document.getElementById('nicSection');
         const nicNumber = document.getElementById('nicNumber');
 
-        // Auto-format and restrict NIC input real-time
         nicNumber.addEventListener('input', function() {
             this.value = this.value.toUpperCase();
         });
@@ -612,12 +603,10 @@
             if (this.value) {
                 const birthYear = new Date(this.value).getFullYear();
                 
-                // Rule: Check if the selected year is 2026
                 if (birthYear === 2026) {
                     alert("Please select the actual year.");
                 }
 
-                // Existing logic for NIC display based on birth year
                 if (birthYear <= 2009) {
                     nicSection.style.display = 'block';
                     nicNumber.required = true;
@@ -721,7 +710,20 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Perform specific NIC validation before submission if active
+            // Lock submit button immediately to stop rapid duplicate clicks
+            const submitBtn = form.querySelector('.btn-register');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = "Processing...";
+
+            // Check form validity before proceeding
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
+                return;
+            }
+
+            // NIC validation check
             if (nicNumber.required) {
                 const nicVal = nicNumber.value.trim();
                 const oldFormat = /^[0-9]{9}[vVxX]$/;
@@ -730,13 +732,11 @@
                 if (!oldFormat.test(nicVal) && !newFormat.test(nicVal)) {
                     alert('Please enter a valid NIC number:\n- 9 numbers followed by "V" or "X" (10 characters)\n- OR 12 numbers');
                     nicNumber.focus();
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
                     return;
                 }
             }
-
-            const submitBtn = form.querySelector('.btn-register');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = "Processing...";
 
             const selectedChurch = churchCategory.value;
             const fileInput = document.getElementById('paymentProof');
@@ -752,7 +752,6 @@
             const sendFormData = (base64Data = '', fileName = '', fileMimeType = '') => {
                 const formData = new URLSearchParams();
                 
-                // Collect standard basic inputs
                 formData.append('fullName', form.querySelector('[name="fullName"]').value);
                 formData.append('contactNumber', form.querySelector('[name="contactNumber"]').value);
                 formData.append('whatsAppNumber', form.querySelector('[name="whatsAppNumber"]').value);
@@ -767,14 +766,12 @@
                 formData.append('tshirtSize', form.querySelector('[name="tshirtSize"]').value);
                 formData.append('worshipRole', form.querySelector('[name="worshipRole"]').value);
 
-                // Checkbox collection
                 const nonVegChoices = Array.from(form.querySelectorAll('input[name="nonVegChoice"]:checked')).map(c => c.value).join(', ');
                 formData.append('nonVegChoice', nonVegChoices);
 
                 const worshipInstruments = Array.from(form.querySelectorAll('input[name="worshipInstruments"]:checked')).map(c => c.value).join(', ');
                 formData.append('worshipInstruments', worshipInstruments);
 
-                // Pastor & Church location logic
                 if (selectedChurch === 'AOG') {
                     formData.append('aogChurchName', aogChurchName.value);
                     formData.append('aogSuburbCity', 'N/A');

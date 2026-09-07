@@ -6,6 +6,8 @@
     <title>Where Is Your David? - Youth Camp Registration</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+    <!-- Google reCAPTCHA v2 API -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         :root {
             --primary-gold: #cca43b;
@@ -257,6 +259,12 @@
             display: block;
         }
 
+        .recaptcha-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
         .btn-register {
             width: 100%;
             background: linear-gradient(180deg, #ffe399 0%, var(--primary-gold) 60%, var(--dark-gold) 100%);
@@ -275,7 +283,7 @@
             align-items: center;
             gap: 10px;
             text-transform: uppercase;
-            margin-top: 25px;
+            margin-top: 15px;
         }
 
         .btn-register:hover {
@@ -569,6 +577,11 @@
                 <span class="file-hint">Accepted Formats: PDF, PNG, JPG, JPEG (Max file size: 10MB)</span>
             </div>
 
+            <!-- reCAPTCHA Container -->
+            <div class="recaptcha-container">
+                <div class="g-recaptcha" data-sitekey="6LeA5a0tAAAAAE0kGbkyFEjBUwe2p7NEKg7bfKrO"></div>
+            </div>
+
             <button type="submit" class="btn-register">
                 <i class="fa-solid fa-crown"></i> Register
             </button>
@@ -723,6 +736,15 @@
                 return;
             }
 
+            // reCAPTCHA Validation
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (recaptchaResponse.length === 0) {
+                alert('Please complete the reCAPTCHA verification.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
+                return;
+            }
+
             // NIC validation check
             if (nicNumber.required) {
                 const nicVal = nicNumber.value.trim();
@@ -752,6 +774,7 @@
             const sendFormData = (base64Data = '', fileName = '', fileMimeType = '') => {
                 const formData = new URLSearchParams();
                 
+                formData.append('g-recaptcha-response', recaptchaResponse);
                 formData.append('fullName', form.querySelector('[name="fullName"]').value);
                 formData.append('contactNumber', form.querySelector('[name="contactNumber"]').value);
                 formData.append('whatsAppNumber', form.querySelector('[name="whatsAppNumber"]').value);
@@ -811,6 +834,7 @@
 
                         document.getElementById('successModal').style.display = 'flex';
                         form.reset();
+                        grecaptcha.reset();
                         nicSection.style.display = 'none';
                         nicNumber.required = false;
                         pastorName.disabled = false;
@@ -821,12 +845,14 @@
                         paymentProofGroup.style.display = 'block';
                     } else {
                         alert('Registration Error: ' + (data.error || 'Unknown error'));
+                        grecaptcha.reset();
                     }
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
                 })
                 .catch(error => {
                     alert('Something went wrong. Please try again.');
+                    grecaptcha.reset();
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
                 });

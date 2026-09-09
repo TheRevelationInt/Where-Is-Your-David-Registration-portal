@@ -258,10 +258,13 @@
             display: block;
         }
 
-        /* Honeypot Hidden Style */
-        .hp-field {
-            display: none !important;
-            visibility: hidden !important;
+        /* Enhanced Hidden Honeypot Styling */
+        .hp-container {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            opacity: 0;
+            pointer-events: none;
         }
 
         .recaptcha-container {
@@ -414,12 +417,13 @@
             <h2>Organized by Joshua's Force</h2>
         </div>
 
-        <form id="registrationForm" action="https://script.google.com/macros/s/AKfycbz-Fqntbl4sD7uRXYaHGQfKK_RFLx8ZMnL28BZ67q7SxIT3pOEtqIe_IVeDsnZaetg9vQ/exec" method="POST">
+        <form id="registrationForm" method="POST">
             
-            <!-- Honeypot Field for Bot Catching -->
-            <div class="hp-field">
-                <input type="text" name="website_hp" autocomplete="off" tabindex="-1">
+            <!-- Honeypot & Timestamp Bot Checks -->
+            <div class="hp-container">
+                <input type="text" name="website_hp" id="website_hp" tabindex="-1" autocomplete="off">
             </div>
+            <input type="hidden" name="render_ts" id="render_ts">
 
             <div class="form-group">
                 <label><i class="fa-solid fa-user"></i> Full Name</label>
@@ -614,6 +618,9 @@
     </div>
 
     <script>
+        // Set timestamp for rate limiting bot checks
+        document.getElementById('render_ts').value = new Date().getTime();
+
         const dobInput = document.getElementById('dobInput');
         const nicSection = document.getElementById('nicSection');
         const nicNumber = document.getElementById('nicNumber');
@@ -733,7 +740,6 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Check reCAPTCHA verification before processing
             if (typeof grecaptcha !== 'undefined') {
                 const recaptchaResponse = grecaptcha.getResponse();
                 if (recaptchaResponse.length === 0) {
@@ -742,7 +748,6 @@
                 }
             }
 
-            // Lock submit button immediately
             const submitBtn = form.querySelector('.btn-register');
             submitBtn.disabled = true;
             submitBtn.innerHTML = "Processing...";
@@ -796,9 +801,10 @@
                 formData.append('tshirtSize', form.querySelector('[name="tshirtSize"]').value);
                 formData.append('worshipRole', form.querySelector('[name="worshipRole"]').value);
 
-                // Include Honeypot & reCAPTCHA values
-                const hpValue = form.querySelector('[name="website_hp"]').value;
-                formData.append('website_hp', hpValue);
+                // Include Bot Protection Tokens
+                formData.append('website_hp', document.getElementById('website_hp').value);
+                formData.append('render_ts', document.getElementById('render_ts').value);
+
                 if (typeof grecaptcha !== 'undefined') {
                     formData.append('g-recaptcha-response', grecaptcha.getResponse());
                 }
@@ -832,7 +838,10 @@
                     formData.append('fileMimeType', fileMimeType);
                 }
 
-                fetch(form.action, {
+                // Construct action endpoint dynamically upon submit
+                const targetEndpoint = "https://script.google.com/macros/s/AKfycbz-Fqntbl4sD7uRXYaHGQfKK_RFLx8ZMnL28BZ67q7SxIT3pOEtqIe_IVeDsnZaetg9vQ/exec";
+
+                fetch(targetEndpoint, {
                     method: 'POST',
                     body: formData
                 })

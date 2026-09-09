@@ -6,6 +6,7 @@
     <title>Where Is Your David? - Youth Camp Registration</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Great+Vibes&display=swap" rel="stylesheet">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         :root {
             --primary-gold: #cca43b;
@@ -257,6 +258,18 @@
             display: block;
         }
 
+        /* Honeypot Hidden Style */
+        .hp-field {
+            display: none !important;
+            visibility: hidden !important;
+        }
+
+        .recaptcha-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
         .btn-register {
             width: 100%;
             background: linear-gradient(180deg, #ffe399 0%, var(--primary-gold) 60%, var(--dark-gold) 100%);
@@ -403,6 +416,11 @@
 
         <form id="registrationForm" action="https://script.google.com/macros/s/AKfycbz-Fqntbl4sD7uRXYaHGQfKK_RFLx8ZMnL28BZ67q7SxIT3pOEtqIe_IVeDsnZaetg9vQ/exec" method="POST">
             
+            <!-- Honeypot Field for Bot Catching -->
+            <div class="hp-field">
+                <input type="text" name="website_hp" autocomplete="off" tabindex="-1">
+            </div>
+
             <div class="form-group">
                 <label><i class="fa-solid fa-user"></i> Full Name</label>
                 <input type="text" name="fullName" class="form-control" placeholder="Enter your full name" required>
@@ -569,6 +587,11 @@
                 <span class="file-hint">Accepted Formats: PDF, PNG, JPG, JPEG (Max file size: 10MB)</span>
             </div>
 
+            <!-- reCAPTCHA Widget Placement -->
+            <div class="recaptcha-container">
+                <div class="g-recaptcha" data-sitekey="6Lemr7EtAAAAACw4u71H-cTcv29vK7Wc0jguF8MR"></div>
+            </div>
+
             <button type="submit" class="btn-register">
                 <i class="fa-solid fa-crown"></i> Register
             </button>
@@ -710,12 +733,20 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Lock submit button immediately to stop rapid duplicate clicks
+            // Check reCAPTCHA verification before processing
+            if (typeof grecaptcha !== 'undefined') {
+                const recaptchaResponse = grecaptcha.getResponse();
+                if (recaptchaResponse.length === 0) {
+                    alert('Please complete the reCAPTCHA check to submit.');
+                    return;
+                }
+            }
+
+            // Lock submit button immediately
             const submitBtn = form.querySelector('.btn-register');
             submitBtn.disabled = true;
             submitBtn.innerHTML = "Processing...";
 
-            // Check form validity before proceeding
             if (!form.checkValidity()) {
                 form.reportValidity();
                 submitBtn.disabled = false;
@@ -723,7 +754,6 @@
                 return;
             }
 
-            // NIC validation check
             if (nicNumber.required) {
                 const nicVal = nicNumber.value.trim();
                 const oldFormat = /^[0-9]{9}[vVxX]$/;
@@ -765,6 +795,13 @@
                 formData.append('foodPreference', form.querySelector('[name="foodPreference"]').value);
                 formData.append('tshirtSize', form.querySelector('[name="tshirtSize"]').value);
                 formData.append('worshipRole', form.querySelector('[name="worshipRole"]').value);
+
+                // Include Honeypot & reCAPTCHA values
+                const hpValue = form.querySelector('[name="website_hp"]').value;
+                formData.append('website_hp', hpValue);
+                if (typeof grecaptcha !== 'undefined') {
+                    formData.append('g-recaptcha-response', grecaptcha.getResponse());
+                }
 
                 const nonVegChoices = Array.from(form.querySelectorAll('input[name="nonVegChoice"]:checked')).map(c => c.value).join(', ');
                 formData.append('nonVegChoice', nonVegChoices);
@@ -811,6 +848,7 @@
 
                         document.getElementById('successModal').style.display = 'flex';
                         form.reset();
+                        if (typeof grecaptcha !== 'undefined') { grecaptcha.reset(); }
                         nicSection.style.display = 'none';
                         nicNumber.required = false;
                         pastorName.disabled = false;
@@ -821,12 +859,14 @@
                         paymentProofGroup.style.display = 'block';
                     } else {
                         alert('Registration Error: ' + (data.error || 'Unknown error'));
+                        if (typeof grecaptcha !== 'undefined') { grecaptcha.reset(); }
                     }
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
                 })
                 .catch(error => {
                     alert('Something went wrong. Please try again.');
+                    if (typeof grecaptcha !== 'undefined') { grecaptcha.reset(); }
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fa-solid fa-crown"></i> Register';
                 });
